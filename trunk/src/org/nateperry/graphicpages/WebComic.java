@@ -1,7 +1,7 @@
 package org.nateperry.graphicpages;
 
 public abstract class WebComic { //extends ContentProvider {
-ov
+
 	// content://GraphicPage/<ComicName>/<Id>
 	public static final String URI_NAMESPACE = "GraphicPage";
 
