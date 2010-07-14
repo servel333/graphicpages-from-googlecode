@@ -8,7 +8,7 @@
  * Downloaded pages should be available to the other image viewers on the application (added to the media ContentProvider)
 
 == Get next/last page when browsing pages ==
-* When viewing comics, asynchronically download the next comic in the sequence, then the previous one
+ * When viewing comics, asynchronically download the next comic in the sequence, then the previous one
 
 == Save lists of viewed comics ==
  * Store the 'read' or 'viewed' state of pages
