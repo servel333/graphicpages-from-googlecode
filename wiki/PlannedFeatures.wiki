@@ -14,5 +14,9 @@
  * Store the 'read' or 'viewed' state of pages
  * Optionally discard viewed comics (when space is needed only?)
 
+== Bookmarks ==
+ * automatically save the last page viewed in a sequence
+ ** Browsing from in the middle of a sequence
+
 == Starred pages ==
  * Starred pages are not automatically deleted.
