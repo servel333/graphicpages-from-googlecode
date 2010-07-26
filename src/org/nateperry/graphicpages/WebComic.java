@@ -12,14 +12,16 @@ public abstract class WebComic { //extends ContentProvider {
 
 	public abstract String Name();
 	public abstract String IdName();
-	
+	public abstract String PageName(int id);
+	public abstract String PageDescription(int id);
+
+	public abstract String Url();
+	public abstract String PageUrl(int id);
+
+	//public abstract String UriName();
+
 	public String FullName() {
 		return R.string.app_full_name + "." + IdName();
 	};
 	
-	public abstract String Url();
-	public abstract String PageUrl(int id);
-
-	public abstract String UriName();
-
 }
