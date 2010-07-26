@@ -1,10 +1,13 @@
 package org.nateperry.graphicpages;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class QuestionableContentWebComic extends WebComic {
 
 	//public static final String QC_IMAGE_NAME = R.string.app_full_name + "/" + ID_NAME + "/%s";
 	//public static final String QC_IMAGE_DESCRIPTION = NAME + " comic number %s";
-	public static final String LATEST_REGEX = "^http://www.questionablecontent.net/comics/([0-9]+)[.]png$";
+	public static final String LATEST_REGEX = ".*http://www[.]questionablecontent[.]net/comics/([0-9]+)[.]png.*";
 
 	@Override
 	public String IdName() {
@@ -49,8 +52,20 @@ public class QuestionableContentWebComic extends WebComic {
 		
 		if (!Utils.IsNullOrEmpty(line)) {
 			
-			String st_latest = line.replaceAll(LATEST_REGEX, "$1");
-			latest = Integer.parseInt(st_latest);
+			Matcher matcher = Pattern.compile(LATEST_REGEX).matcher(line);
+			String st_latest = null;
+			if (matcher.lookingAt())
+			{
+				st_latest = matcher.group(1);
+			}
+			
+			Utils.TryParse(st_latest, latest);
+			
+			try {
+				latest = Integer.parseInt(st_latest);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
 			
 		}
 		

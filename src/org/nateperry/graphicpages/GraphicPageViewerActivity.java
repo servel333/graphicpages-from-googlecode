@@ -18,7 +18,6 @@ public class GraphicPageViewerActivity extends Activity
 	private int _current;
 	public static final String KEY_LAST_VIEWED_COMIC = "last_viewed_comic";
 	public static final String KEY_LAST_VIEWED_ID = "last_viewed_id";
-	//public static final int DEFAULT_LAST_VIEWED = 1703;
 	public WebComic comic;
 
     @Override
