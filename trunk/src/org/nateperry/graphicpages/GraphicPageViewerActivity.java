@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -121,18 +122,22 @@ public class GraphicPageViewerActivity extends Activity
     	BitmapDrawable image = Utils.wget_bitmap(pageUrl);
 
     	if (image != null) {
-	    	ContentValues values = new ContentValues(1);
-	        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+	    	//ContentValues values = new ContentValues(1);
+	        //values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
 	        //values.put(MediaStore.Images.Media.DISPLAY_NAME, "");
 
 	        //String url = 
-	        	MediaStore.Images.Media.insertImage(
-	        		getContentResolver(), 
-	        		image.getBitmap(), 
-	        		comic.PageName(number), 
-	        		comic.PageDescription(number));
+	        //	MediaStore.Images.Media.insertImage(
+	        //		getContentResolver(), 
+	        //		image.getBitmap(), 
+	        //		comic.PageName(number), 
+	        //		comic.PageDescription(number));
 	        
 	        //Log.i("Comic URL", url);
+
+        	ImageView im = (ImageView)findViewById(R.id.ui_image_ImageView);
+            im.setAdjustViewBounds(true);
+    		im.setBackgroundDrawable(Utils.wget_bitmap("http://www.questionablecontent.net/comics/1695.png"));
     	}
     };
 
