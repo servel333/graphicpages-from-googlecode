@@ -2,10 +2,8 @@ package org.nateperry.graphicpages;
 
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -136,8 +134,9 @@ public class GraphicPageViewerActivity extends Activity
 	        //Log.i("Comic URL", url);
 
         	ImageView im = (ImageView)findViewById(R.id.ui_image_ImageView);
-            im.setAdjustViewBounds(true);
-    		im.setBackgroundDrawable(Utils.wget_bitmap("http://www.questionablecontent.net/comics/1695.png"));
+    		im.setBackgroundDrawable(image);
+            //im.setAdjustViewBounds(true);
+            //im.setScaleType( ImageView.ScaleType.CENTER);
     	}
     };
 

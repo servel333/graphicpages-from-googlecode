@@ -63,6 +63,7 @@
         android:layout_height="fill_parent"
         android:layout_below="@+id/ui_navbox_RelativeLayout"
         android:layout_gravity="center"
+        android:scaleType="center"
         />
 
 </RelativeLayout>
