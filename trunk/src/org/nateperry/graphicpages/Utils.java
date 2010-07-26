@@ -148,10 +148,8 @@ public class Utils {
 		try {
 			return FindOnPage(pageUrl, expr, skipMatches);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -162,4 +160,16 @@ public class Utils {
 		return (text == null) | (text == "");
 	}
 
+	public static boolean TryParse(String s, Integer i) {
+		
+		try {
+			i = Integer.parseInt(s);
+		} catch (Exception e) {
+			return false;
+		}
+		
+		return true;
+	}
+
+	
 }
