@@ -4,7 +4,6 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 public class LibraryProvider extends ContentProvider {
 
@@ -56,20 +55,24 @@ public class LibraryProvider extends ContentProvider {
 	}
 
     public static String GetUri(int number) {
-    	return String.format(URI, QC_NAME, "" + number);
+    	//return String.format(URI, Name(), "" + number);
+    	return null;
     };
 
     public static String GetUrl(int number) {
-    	Log.i("Comic URL", String.format(QC_URL, "" + number));
-    	return String.format(QC_URL, number);
+    	//Log.i("Comic URL", String.format(QC_URL, "" + number));
+    	//return String.format(QC_URL, number);
+    	return null;
     };
 
     public static String GetName(int number) {
-    	return String.format(QC_IMAGE_NAME, number);
+    	//return String.format(QC_IMAGE_NAME, number);
+    	return null;
     };
 
     public static String GetDescription(int number) {
-    	return String.format(QC_IMAGE_DESCRIPTION, number);
+    	//return String.format(QC_IMAGE_DESCRIPTION, number);
+    	return null;
     };
 
 }
