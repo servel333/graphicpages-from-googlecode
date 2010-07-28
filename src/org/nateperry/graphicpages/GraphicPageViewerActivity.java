@@ -11,13 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-public class GraphicPageViewerActivity extends Activity
-{
+public class GraphicPageViewerActivity extends Activity {
 
 	private int _current;
 	public static final String KEY_LAST_VIEWED_COMIC = "last_viewed_comic";
 	public static final String KEY_LAST_VIEWED_ID = "last_viewed_id";
 	public WebComic comic;
+	public PageTouchListener touchListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -29,6 +29,9 @@ public class GraphicPageViewerActivity extends Activity
     	((Button)findViewById(R.id.ui_oldest_Button)).setOnClickListener(ui_oldest_Button_Click);
     	((Button)findViewById(R.id.ui_newer_Button)).setOnClickListener(ui_newer_Button_Click);
     	((Button)findViewById(R.id.ui_older_Button)).setOnClickListener(ui_older_Button_Click);
+
+    	touchListener = new PageTouchListener();
+    	((ImageView)findViewById(R.id.ui_image_ImageView)).setOnTouchListener(touchListener);
 
     	comic = new QuestionableContentWebComic();
 		
@@ -42,7 +45,6 @@ public class GraphicPageViewerActivity extends Activity
     	if (_current == -1) {
     		_current = comic.NewestId();
     	}
-
     };
 
     @Override
