@@ -3,6 +3,7 @@ package org.nateperry.graphicpages;
 
 import android.app.Activity;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +19,7 @@ public class GraphicPageViewerActivity extends Activity {
 	public static final String KEY_LAST_VIEWED_ID = "last_viewed_id";
 	public WebComic comic;
 	public PageTouchListener touchListener;
+	private UpdateTask _updateTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -29,10 +31,10 @@ public class GraphicPageViewerActivity extends Activity {
     	((Button)findViewById(R.id.ui_oldest_Button)).setOnClickListener(ui_oldest_Button_Click);
     	((Button)findViewById(R.id.ui_newer_Button)).setOnClickListener(ui_newer_Button_Click);
     	((Button)findViewById(R.id.ui_older_Button)).setOnClickListener(ui_older_Button_Click);
-
+    	
     	touchListener = new PageTouchListener();
     	((ImageView)findViewById(R.id.ui_image_ImageView)).setOnTouchListener(touchListener);
-
+    	
     	comic = new QuestionableContentWebComic();
 		
     	// this.getIntent().getIntExtra(KEY_LAST_VIEWED, DEFAULT_LAST_VIEWED);
@@ -41,7 +43,7 @@ public class GraphicPageViewerActivity extends Activity {
     	} else {
     		_current = -1;
     	}
-
+    	
     	if (_current == -1) {
     		_current = comic.NewestId();
     	}
@@ -86,22 +88,80 @@ public class GraphicPageViewerActivity extends Activity {
     	outState.putInt(KEY_LAST_VIEWED_ID, _current);
     };
 
-    protected void Update() {
-		try {
+    private OnClickListener ui_newest_Button_Click = new OnClickListener()
+    {
+        public void onClick(View v)
+        {
+        	_current = comic.NewestId();
+        	Update();
+        }
+    };
 
-	     	TextView text = (TextView)findViewById(R.id.ui_info_TextView);
-	     	text.setText("QC #" + _current);
+    private OnClickListener ui_oldest_Button_Click = new OnClickListener()
+    {
+        public void onClick(View v)
+        {
+        	_current = comic.OldestId();
+        	Update();
+        }
+    };
 
-	    	if (!HavePage(_current)) {
-	    		GetPage(_current);
-	    	}
+    private OnClickListener ui_newer_Button_Click = new OnClickListener()
+    {
+        public void onClick(View v)
+        {
+        	_current = comic.NewerId(_current);
+        	Update();
+        }
+    };
 
-    		ShowPage(_current);
+    private OnClickListener ui_older_Button_Click = new OnClickListener()
+    {
+        public void onClick(View v)
+        {
+        	_current = comic.OlderId(_current);
+        	Update();
+        }
+    };
 
-		} catch (Exception e) {
-			//Log.e("GraphicPageViewerActivity", "", e);
-			e.printStackTrace();
+	//public void onClick(View v) {
+	//	new DownloadImageTask().execute("http://example.com/image.png");
+	//}
+
+	private class UpdateTask extends AsyncTask<Integer, Integer, BitmapDrawable> {
+
+		@Override
+		protected BitmapDrawable doInBackground(Integer... params) {
+
+			try {
+		    	String pageUrl = comic.PageUrl(params[0]);
+		    	BitmapDrawable image = Utils.wget_bitmap(pageUrl);
+
+		    	return image;
+		    	
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return null;
 		}
+
+		protected void onPostExecute(BitmapDrawable result) {
+	     	if (result != null) {
+		     	TextView text = (TextView)findViewById(R.id.ui_info_TextView);
+		     	text.setText("QC #" + _current);
+
+		     	ImageView im = (ImageView)findViewById(R.id.ui_image_ImageView);
+	     		im.setBackgroundDrawable(result);
+	    	}
+		}
+
+	}
+
+    protected void Update() {
+    	//if (_updateTask != null) _updateTask.cancel(true);
+		_updateTask = new UpdateTask();
+    	_updateTask.execute(_current);
     };
 
     protected boolean HavePage(int number) {
@@ -140,42 +200,6 @@ public class GraphicPageViewerActivity extends Activity {
             //im.setAdjustViewBounds(true);
             //im.setScaleType( ImageView.ScaleType.CENTER);
     	}
-    };
-
-    private OnClickListener ui_newest_Button_Click = new OnClickListener()
-    {
-        public void onClick(View v)
-        {
-        	_current = comic.NewestId();
-        	Update();
-        }
-    };
-
-    private OnClickListener ui_oldest_Button_Click = new OnClickListener()
-    {
-        public void onClick(View v)
-        {
-        	_current = comic.OldestId();
-        	Update();
-        }
-    };
-
-    private OnClickListener ui_newer_Button_Click = new OnClickListener()
-    {
-        public void onClick(View v)
-        {
-        	_current = comic.NewerId(_current);
-        	Update();
-        }
-    };
-
-    private OnClickListener ui_older_Button_Click = new OnClickListener()
-    {
-        public void onClick(View v)
-        {
-        	_current = comic.OlderId(_current);
-        	Update();
-        }
     };
 
 }
