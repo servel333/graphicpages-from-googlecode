@@ -4,52 +4,54 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import android.graphics.drawable.BitmapDrawable;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.http.AndroidHttpClient;
+import android.util.Log;
 
 public class Utils {
 
-	public static InputStream wget(String imageUrl)
-	{
-		URL url = null;
-		InputStream stream = null;
+	//public static InputStream wget(String imageUrl)
+	//{
+	//	InputStream stream = null;
+	//
+	//	try 
+	//	{
+	//		URL url = null;
+	//		url= new URL(imageUrl);
+	//		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	//		connection.setDoInput(true);
+	//		connection.connect();
+	//		stream = connection.getInputStream();
+	//	} 
+	//	catch (MalformedURLException e) 
+	//	{
+	//		e.printStackTrace();
+	//	}
+	//	catch (IOException e) 
+	//	{
+	//		e.printStackTrace();
+	//	}
+	//
+	//	return stream;
+	//};
 
-		try 
-		{
-			url= new URL(imageUrl);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setDoInput(true);
-			connection.connect();
-			stream = connection.getInputStream();
-		} 
-		catch (MalformedURLException e) 
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-
-		return stream;
-	};
-
-    /** downloads the image and returns the drawable. */
-	public static BitmapDrawable wget_bitmap(String imageUrl)
-	{
-		InputStream stream = wget(imageUrl);
-		BitmapDrawable image = null;
-		image = new BitmapDrawable(stream);
-		return image;
-	};
-
-    public static String wget_html(String pageUrl)
-	{
-		return null;
-	};
+    ///** downloads the image and returns the drawable. */
+	//public static BitmapDrawable wget_bitmap(String imageUrl)
+	//{
+	//	InputStream stream = wget(imageUrl);
+	//	BitmapDrawable image = null;
+	//	image = new BitmapDrawable(stream);
+	//	return image;
+	//};
 
 	public static BufferedReader getReader(String pageUrl) 
 			throws MalformedURLException, IOException {
@@ -170,6 +172,43 @@ public class Utils {
 		
 		return true;
 	}
-
 	
+	// From http://android-developers.blogspot.com/2010/07/multithreading-for-performance.html
+	static Bitmap downloadBitmap(String url) {
+	    final AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
+	    final HttpGet getRequest = new HttpGet(url);
+
+	    try {
+	        HttpResponse response = client.execute(getRequest);
+	        final int statusCode = response.getStatusLine().getStatusCode();
+	        if (statusCode != HttpStatus.SC_OK) { 
+	            Log.w("ImageDownloader", "Error " + statusCode + " while retrieving bitmap from " + url); 
+	            return null;
+	        }
+	        
+	        final HttpEntity entity = response.getEntity();
+	        if (entity != null) {
+	            InputStream inputStream = null;
+	            try {
+	                inputStream = entity.getContent(); 
+	                final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+	                return bitmap;
+	            } finally {
+	                if (inputStream != null) {
+	                    inputStream.close();  
+	                }
+	                entity.consumeContent();
+	            }
+	        }
+	    } catch (Exception e) {
+	        // Could provide a more explicit error message for IOException or IllegalStateException
+	        getRequest.abort();
+	        //Log.w("ImageDownloader", "Error while retrieving bitmap from " + url, e.toString());
+	    } finally {
+	        if (client != null) {
+	            client.close();
+	        }
+	    }
+	    return null;
+	}
 }
