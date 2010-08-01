@@ -10,34 +10,29 @@ public class QuestionableContentWebComic extends WebComic {
 	public static final String LATEST_REGEX = ".*http://www[.]questionablecontent[.]net/comics/([0-9]+)[.]png.*";
 
 	@Override
-	public String IdName() {
+	public String OnGetIdName() {
 		return "QuestionableContent";
 	}
 
 	@Override
-	public String Name() {
+	public String OnGetName() {
 		return "Questionable Content";
 	}
 	
 	@Override
-	public String PageUrl(int id) {
+	public String OnGetPageUrl(int id) {
 		return String.format("http://www.questionablecontent.net/comics/%s.png", id);
 	}
 
 	@Override
-	public String Url() {
+	public String OnGetUrl() {
 		return "http://www.questionablecontent.net";
 	}
 
-	//@Override
-	//public String UriName() {
-	//	return null;
-	//}
-
 	@Override
-	public int NewerId(int id) {
+	public int OnGetNewerId(int id) {
 
-		if (NewestId() > id) {
+		if (GetNewestId() > id) {
 			id += 1;
 		}
 		
@@ -45,10 +40,10 @@ public class QuestionableContentWebComic extends WebComic {
 	}
 
 	@Override
-	public int NewestId() {
+	public int OnGetNewestId() {
 		
-		int latest = OldestId();
-		String line = Utils.FindOnPage_Safe(Url(), LATEST_REGEX);
+		int latest = GetOldestId();
+		String line = Utils.FindOnPage_Safe(GetUrl(), LATEST_REGEX);
 		
 		if (!Utils.IsNullOrEmpty(line)) {
 			
@@ -73,9 +68,9 @@ public class QuestionableContentWebComic extends WebComic {
 	}
 
 	@Override
-	public int OlderId(int id) {
+	public int OnGetOlderId(int id) {
 		
-		if (OldestId() < id) {
+		if (GetOldestId() < id) {
 			id -= 1;
 		}
 		
@@ -83,19 +78,18 @@ public class QuestionableContentWebComic extends WebComic {
 	}
 
 	@Override
-	public int OldestId() {
+	public int OnGetOldestId() {
 		return 1;
 	}
 
-
 	@Override
-	public String PageDescription(int id) {
-		return String.format("%s %s", Name(), id);
+	public String OnGetPageDescription(int id) {
+		return String.format("%s %s", GetName(), id);
 	}
 
 	@Override
-	public String PageName(int id) {
-		return String.format("%s %s", Name(), id);
+	public String OnGetPageName(int id) {
+		return String.format("%s %s", GetName(), id);
 	}
 
 }
