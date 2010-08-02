@@ -66,6 +66,12 @@ public abstract class WebComic { //extends ContentProvider {
 		return OnGetPageUrl(id);
 	}
 
+	protected abstract String OnGetFileName(int id);
+	
+	public final String GetFileName(int id) {
+		return OnGetFileName(id);
+	}
+
 	protected String OnGetFullName() {
 		return R.string.app_full_name + "." + GetIdName();
 	}
@@ -73,9 +79,5 @@ public abstract class WebComic { //extends ContentProvider {
 	public final String GetFullName() {
 		return OnGetFullName();
 	}
-
-	public String FullName() {
-		return R.string.app_full_name + "." + GetIdName();
-	}
-
+	
 }

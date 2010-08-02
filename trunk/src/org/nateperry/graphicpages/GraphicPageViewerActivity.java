@@ -6,11 +6,13 @@ import java.io.FileOutputStream;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -206,42 +208,56 @@ public class GraphicPageViewerActivity extends Activity {
 				    	}
 						break;
 				}
-
-		    	String pageUrl = _comic.GetPageUrl(_current);
-		    	Bitmap image = Utils.downloadBitmap(pageUrl);
-		    	
-		    	// Write the bitmap to a file.
-		    	// Todo: buffer and write the file peace by peace instead of loading the whole thing into memory.
-
-		    	File dir;
-		    	FileOutputStream out;
-		    	File urlPage = new File(pageUrl);
-		    	String relPath = _comic.GetName() + "/" + _current + "-" + urlPage.getName();
-		    	urlPage = null;
+				
+				// Check file on disk
+				
+				Bitmap image;
+				
+				File dir = getFilesDir();
+	    		File file = new File(dir, _comic.GetFileName(_current));
+	    		File xFile = null;
 
 		    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-		    		
-			    	dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-			    	
-			    	File file = new File(dir, relPath);
-			    	//file.createNewFile();
-			    	out = new FileOutputStream(file);
-			    	
-		    	} else {
-		    		
-			    	dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-			    	
-			    	out = openFileOutput(relPath, Context.MODE_PRIVATE);
+
+			    	File xDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+		    		xFile = new File(xDir, _comic.GetFileName(_current));
+		    	
 		    	}
 
-		    	image.compress(CompressFormat.JPEG, 75, out);
-		    	out.flush();
-		    	out.close();
+	    		if (file.exists()) {
+	    			image = BitmapFactory.decodeFile(file.getAbsolutePath());
+	    		} else if (xFile != null && xFile.exists()) {
+	    			image = BitmapFactory.decodeFile(xFile.getAbsolutePath());
+	    		} else {
 
+			    	String pageUrl = _comic.GetPageUrl(_current);
+			    	image = Utils.downloadBitmap(pageUrl);
+	    			
+			    	// Write the bitmap to a file.
+			    	// Todo: buffer and write the file peace by peace instead of loading the whole thing into memory.
+
+			    	FileOutputStream out;
+
+			    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+			    		
+				    	out = new FileOutputStream(file);
+				    	
+			    	} else {
+			    		
+				    	out = openFileOutput(_comic.GetFileName(_current), Context.MODE_PRIVATE);
+				    	
+			    	}
+
+			    	image.compress(CompressFormat.PNG, 75, out);
+			    	out.flush();
+			    	out.close();
+	    		}
+	    		
 		    	return image;
 		    	
 			} catch (Exception e) {
 				e.printStackTrace();
+				Log.w("downloading", e);
 			}
 			
 			return null;
