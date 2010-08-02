@@ -91,5 +91,11 @@ public class QuestionableContentWebComic extends WebComic {
 	public String OnGetPageName(int id) {
 		return String.format("%s %s", GetName(), id);
 	}
+	
+
+	@Override
+	protected String OnGetFileName(int id) {
+		return this.GetName() + "-" + id + ".png";
+	}
 
 }
