@@ -11,10 +11,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.http.AndroidHttpClient;
 import android.util.Log;
 
 public class Utils {
@@ -175,7 +175,9 @@ public class Utils {
 	
 	// From http://android-developers.blogspot.com/2010/07/multithreading-for-performance.html
 	static Bitmap downloadBitmap(String url) {
-	    final AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
+		
+		//final AndroidHttpClient client = AndroidHttpClient("Android"); // Android API 8 only
+	    final DefaultHttpClient client = new DefaultHttpClient();
 	    final HttpGet getRequest = new HttpGet(url);
 
 	    try {
@@ -206,7 +208,7 @@ public class Utils {
 	        //Log.w("ImageDownloader", "Error while retrieving bitmap from " + url, e.toString());
 	    } finally {
 	        if (client != null) {
-	            client.close();
+	            //client.close(); // Android API 8 only
 	        }
 	    }
 	    return null;

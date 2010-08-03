@@ -1,6 +1,7 @@
 package org.nateperry.graphicpages;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import android.app.Activity;
@@ -27,6 +28,7 @@ public class GraphicPageViewerActivity extends Activity {
 	public WebComic _comic;
 	public PageTouchListener touchListener;
 	private UpdateTask _updateTask;
+	public static final String PACKAGE_NAME = "org.nateperry.graphicpages";
 
 	private static final int ACTION_OLDEST = -2;
 	private static final int ACTION_OLDER  = -1;
@@ -219,17 +221,26 @@ public class GraphicPageViewerActivity extends Activity {
 
 		    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 
-			    	File xDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-		    		xFile = new File(xDir, _comic.GetFileName(_current));
+			    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
+
+			    	File xDir = Environment.getExternalStorageDirectory();
+			    	File myDir = new File(xDir, "/Android/data/" + PACKAGE_NAME + "/files/");
+		    		xFile = new File(myDir, _comic.GetFileName(_current));
 		    	
 		    	}
 
 	    		if (file.exists()) {
-	    			image = BitmapFactory.decodeFile(file.getAbsolutePath());
+	    			
+	    			FileInputStream in = openFileInput(_comic.GetFileName(_current));
+	    			image = BitmapFactory.decodeStream(in);
+	    			
 	    		} else if (xFile != null && xFile.exists()) {
-	    			image = BitmapFactory.decodeFile(xFile.getAbsolutePath());
+	    			
+	    			FileInputStream in = new FileInputStream(xFile.getAbsolutePath());
+	    			image = BitmapFactory.decodeStream(in);
+	    			
 	    		} else {
-
+	    			
 			    	String pageUrl = _comic.GetPageUrl(_current);
 			    	image = Utils.downloadBitmap(pageUrl);
 	    			
