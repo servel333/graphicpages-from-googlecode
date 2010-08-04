@@ -1,15 +1,59 @@
 package org.nateperry.graphicpages;
 
+import java.util.Calendar;
+
 public abstract class WebComic { //extends ContentProvider {
 
 	// content://GraphicPage/<ComicName>/<Id>
 	public static final String URI_NAMESPACE = "GraphicPage";
-	public static final int TIMEOUT_MINS = 1;
+	public static final int TIMEOUT_MINS = 30;
+	
+	public Calendar _lastGotNewestId = null;
+	public int _newestId;
 	
 	protected abstract int OnGetNewestId();
 
 	public final int GetNewestId() {
-		return OnGetNewestId();
+		if (_lastGotNewestId == null) {
+			
+			_lastGotNewestId = Calendar.getInstance();
+			_newestId = OnGetNewestId();
+			
+		} else {
+			
+			Calendar timeout = Calendar.getInstance();
+			timeout.add(Calendar.MINUTE, TIMEOUT_MINS);
+			
+			if (_lastGotNewestId.after(timeout)) {
+				_newestId = OnGetNewestId();
+			}
+		}
+		return _newestId;
+	}
+
+	public final int GetNewestId(boolean forceUpdate) {
+		if (forceUpdate) {
+			_lastGotNewestId = Calendar.getInstance();
+			_newestId = OnGetNewestId();
+		} else {
+			if (_lastGotNewestId == null) {
+				
+				_lastGotNewestId = Calendar.getInstance();
+				_newestId = OnGetNewestId();
+				
+			} else {
+				
+				Calendar timeout = Calendar.getInstance();
+				timeout.add(Calendar.MINUTE, TIMEOUT_MINS);
+				
+				if (_lastGotNewestId.after(timeout)) {
+					_lastGotNewestId = Calendar.getInstance();
+					_newestId = OnGetNewestId();
+				}
+			}
+		}
+
+		return _newestId;
 	}
 
 	protected abstract int OnGetOldestId();
