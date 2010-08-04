@@ -9,7 +9,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -134,7 +133,7 @@ public class GraphicPageViewerActivity extends Activity {
 
 	//public void onClick(View v) {
     protected void Update(int action) {
-    	if (_updateTask != null) _updateTask.cancel(true);
+    	if (_updateTask != null) _updateTask.cancel(false);
 		_updateTask = new UpdateTask();
     	_updateTask.execute(action);
     };
@@ -202,7 +201,7 @@ public class GraphicPageViewerActivity extends Activity {
 			        	_current = _comic.GetNewerId(_current);
 						break;
 					case ACTION_NEWEST:
-			        	_current = _comic.GetNewestId();
+			        	_current = _comic.GetNewestId(true);
 						break;
 					default: // ACTION_UPDATE
 				    	if (_current == -1) {
@@ -228,7 +227,7 @@ public class GraphicPageViewerActivity extends Activity {
 		    		xFile = new File(myDir, _comic.GetFileName(_current));
 		    	
 		    	}
-
+		    	
 	    		if (file.exists()) {
 	    			
 	    			FileInputStream in = openFileInput(_comic.GetFileName(_current));
@@ -280,8 +279,7 @@ public class GraphicPageViewerActivity extends Activity {
 		     	text.setText("QC #" + _current);
 
 		     	ImageView im = (ImageView)findViewById(R.id.ui_image_ImageView);
-		     	BitmapDrawable bd = new BitmapDrawable(result);
-	     		im.setBackgroundDrawable(bd);
+	     		im.setImageBitmap(result);
 	    	}
 		}
 		
