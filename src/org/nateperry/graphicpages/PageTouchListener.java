@@ -28,11 +28,24 @@ public class PageTouchListener implements OnTouchListener {
     PointF touch_start = new PointF();
 	PointF touch_mid = new PointF();
     float touch_oldDist = 1f;
+    ImageView view = null;
 
-	public boolean onTouch(View v, MotionEvent event) {
+    public void ResetTouch() {
+        matrix = new Matrix();
+        savedMatrix = new Matrix();
+    	touch_start = new PointF();
+    	touch_mid = new PointF();
+    	touch_oldDist = 1f;
+    	
+    	if (null != view) {
+    		view.setImageMatrix(matrix);
+    	}
+    }
+    
+    public boolean onTouch(View v, MotionEvent event) {
 
-		ImageView view = (ImageView) v;
-
+		view = (ImageView) v;
+		
 		// Dump touch event to log
 		dumpEvent(event);
 

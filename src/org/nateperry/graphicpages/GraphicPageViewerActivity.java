@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
@@ -147,7 +148,9 @@ public class GraphicPageViewerActivity extends Activity {
         // Handle item selection
         switch (item.getItemId()) {
         case R.id.list_files:
-        	Toast.makeText(getApplicationContext(), "Not suppoted yet.", Toast.LENGTH_SHORT).show();
+        	//Toast.makeText(getApplicationContext(), "Not suppoted yet.", Toast.LENGTH_SHORT).show();
+        	Intent i = new Intent(this, ListFilesActivity.class);
+            startActivity(i);
             return true;
         case R.id.jump_to:
         	Toast.makeText(getApplicationContext(), "Not suppoted yet.", Toast.LENGTH_SHORT).show();
@@ -165,46 +168,6 @@ public class GraphicPageViewerActivity extends Activity {
 		_updateTask = new UpdateTask();
     	_updateTask.execute(action);
     };
-
-    //protected boolean HavePage(int number) {
-	//    // MediaStore.Images.Media.getBitmap(getContentResolver(), url)
-    //
-    //    return false;
-    //};
-    
-
-    //protected void ShowPage(int number) {
-    //    //ImageView im = (ImageView)findViewById(R.id.ui_image_ImageView);
-    //    //im.setAdjustViewBounds(true);
-	//    //im.setBackgroundDrawable(wget("http://www.questionablecontent.net/comics/1695.png"));
-    //};
-    
-
-    //protected void GetPage(int number) {
-    //
-    //    String pageUrl = comic.PageUrl(number);
-    //    BitmapDrawable image = Utils.wget_bitmap(pageUrl);
-    //
-    //    if (image != null) {
-	//        //ContentValues values = new ContentValues(1);
-	//        //values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
-	//        //values.put(MediaStore.Images.Media.DISPLAY_NAME, "");
-    //
-	//        //String url = 
-	//        //	MediaStore.Images.Media.insertImage(
-	//        //		getContentResolver(), 
-	//        //		image.getBitmap(), 
-	//        //		comic.PageName(number), 
-	//        //		comic.PageDescription(number));
-	//        
-	//        //Log.i("Comic URL", url);
-    //
-    //        ImageView im = (ImageView)findViewById(R.id.ui_image_ImageView);
-    //        im.setBackgroundDrawable(image);
-    //        //im.setAdjustViewBounds(true);
-    //        //im.setScaleType( ImageView.ScaleType.CENTER);
-    //    }
-    //};
 
 	private class UpdateTask extends AsyncTask<Integer, Integer, Bitmap> {
 
@@ -240,19 +203,20 @@ public class GraphicPageViewerActivity extends Activity {
 				
 				// Check file on disk
 				
-				Bitmap image;
+				Bitmap image = null;
 				
 				File dir = getFilesDir();
 	    		File file = new File(dir, _comic.GetFileName(_current));
+	    		File xDir = null;
 	    		File xFile = null;
 	    		
 		    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 		    		
 			    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
 		    		
-			    	File xDir = Environment.getExternalStorageDirectory();
-			    	File myDir = new File(xDir, "/Android/data/" + PACKAGE_NAME + "/files/");
-		    		xFile = new File(myDir, _comic.GetFileName(_current));
+			    	File xRootDir = Environment.getExternalStorageDirectory();
+			    	xDir = new File(xRootDir, "/Android/data/" + PACKAGE_NAME + "/files/");
+		    		xFile = new File(xDir, _comic.GetFileName(_current));
 		    		
 		    	}
 		    	
@@ -261,12 +225,22 @@ public class GraphicPageViewerActivity extends Activity {
 	    			FileInputStream in = openFileInput(_comic.GetFileName(_current));
 	    			image = BitmapFactory.decodeStream(in);
 	    			
+	    			if (null == image) {
+	    				file.delete();
+	    			}
+	    			
 	    		} else if (xFile != null && xFile.exists()) {
 	    			
 	    			FileInputStream in = new FileInputStream(xFile.getAbsolutePath());
 	    			image = BitmapFactory.decodeStream(in);
 	    			
-	    		} else {
+	    			if (null == image) {
+	    				xFile.delete();
+	    			}
+	    			
+	    		} 
+	    		
+	    		if (null == image) {
 	    			
 			    	String pageUrl = _comic.GetPageUrl(_current);
 			    	image = Utils.downloadBitmap(pageUrl);
@@ -278,7 +252,10 @@ public class GraphicPageViewerActivity extends Activity {
 			    	
 			    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			    		
-				    	out = new FileOutputStream(file);
+		    			xDir.mkdirs();
+		    			xFile.createNewFile();
+		    			
+				    	out = new FileOutputStream(xFile);
 				    	
 			    	} else {
 			    		
@@ -305,10 +282,12 @@ public class GraphicPageViewerActivity extends Activity {
 		protected void onPostExecute(Bitmap result) {
 	     	if (result != null) {
 		     	TextView text = (TextView)findViewById(R.id.ui_info_TextView);
-		     	text.setText("QC #" + _current);
-
+		     	text.setText(_comic.GetPageName(_current));
+		     	
 		     	ImageView im = (ImageView)findViewById(R.id.ui_image_ImageView);
 	     		im.setImageBitmap(result);
+	     		
+	     		_touchListener.ResetTouch();
 	    	}
 		}
 		
