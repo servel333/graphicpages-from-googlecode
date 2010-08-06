@@ -2,12 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ui_all_RelativeLayout"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:padding="0px"
+    >
 
     <RelativeLayout
         android:id="@+id/ui_navbox_RelativeLayout"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="0px"
+        >
     
         <TextView 
             android:id="@+id/ui_info_TextView"
@@ -22,12 +26,15 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ui_info_TextView"
+            android:padding="0px"
             >
             <Button
                 android:id="@+id/ui_oldest_Button"
                 android:text="@string/oldest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="2sp"
+                android:paddingBottom="2sp"
                 android:layout_alignParentLeft="true"
                 android:layout_marginRight="3dip"
                 />
@@ -36,6 +43,8 @@
                 android:text="@string/older" 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="2sp"
+                android:paddingBottom="2sp"
                 android:layout_toRightOf="@+id/ui_oldest_Button"
                 />
             <Button
@@ -43,6 +52,8 @@
                 android:text="@string/newest" 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="2sp"
+                android:paddingBottom="2sp"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="3dip"
                 />
@@ -51,6 +62,8 @@
                 android:text="@string/newer" 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="2sp"
+                android:paddingBottom="2sp"
                 android:layout_toLeftOf="@+id/ui_newest_Button"
                 />
         </RelativeLayout>

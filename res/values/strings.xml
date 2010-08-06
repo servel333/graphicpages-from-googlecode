@@ -13,4 +13,7 @@
 
 
 
+<string name="jump_to">Jump to page</string>
+<string name="list_files">List downloaded files</string>
+<string name="quit">Quit</string>
 </resources>

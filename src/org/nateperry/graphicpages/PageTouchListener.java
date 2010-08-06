@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 
+// http://www.zdnet.com/blog/burnette/how-to-use-multi-touch-in-android-2-part-6-implementing-the-pinch-zoom-gesture/1847
 public class PageTouchListener implements OnTouchListener {
 
     private static final String TAG = "Touch";
@@ -56,8 +57,8 @@ public class PageTouchListener implements OnTouchListener {
 				}
 				break;
 
-			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_POINTER_UP:
+			case MotionEvent.ACTION_UP:
 				touch_state = TOUCH_STATE_NONE;
 				Log.d(TAG, "touch_state=TOUCH_STATE_NONE");
 				break;
@@ -66,8 +67,7 @@ public class PageTouchListener implements OnTouchListener {
 				if (touch_state == TOUCH_STATE_DRAG) {
 					matrix.set(savedMatrix);
 					matrix.postTranslate(event.getX() - touch_start.x, event.getY() - touch_start.y);
-				}
-				else if (touch_state == TOUCH_STATE_ZOOM) {
+				} else if (touch_state == TOUCH_STATE_ZOOM) {
 					float newDist = spacing(event);
 					Log.d(TAG, "newDist=" + newDist);
 					if (newDist > 10f) {
