@@ -13,20 +13,24 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GraphicPageViewerActivity extends Activity {
 
 	private int _current;
-	public static final String KEY_LAST_VIEWED_COMIC = "last_viewed_comic";
-	public static final String KEY_LAST_VIEWED_ID = "last_viewed_id";
 	public WebComic _comic;
-	public PageTouchListener touchListener;
+	public PageTouchListener _touchListener;
 	private UpdateTask _updateTask;
+
+	public static final String KEY_LAST_VIEWED_PAGE = "last_viewed_page";
 	public static final String PACKAGE_NAME = "org.nateperry.graphicpages";
 
 	private static final int ACTION_OLDEST = -2;
@@ -46,14 +50,14 @@ public class GraphicPageViewerActivity extends Activity {
     	((Button)findViewById(R.id.ui_newer_Button)).setOnClickListener(ui_newer_Button_Click);
     	((Button)findViewById(R.id.ui_older_Button)).setOnClickListener(ui_older_Button_Click);
     	
-    	touchListener = new PageTouchListener();
-    	((ImageView)findViewById(R.id.ui_image_ImageView)).setOnTouchListener(touchListener);
+    	_touchListener = new PageTouchListener();
+    	((ImageView)findViewById(R.id.ui_image_ImageView)).setOnTouchListener(_touchListener);
     	
     	_comic = new QuestionableContentWebComic();
 		
     	// this.getIntent().getIntExtra(KEY_LAST_VIEWED, DEFAULT_LAST_VIEWED);
     	if (savedInstanceState != null) {
-    		_current = savedInstanceState.getInt(KEY_LAST_VIEWED_ID, -1);
+    		_current = savedInstanceState.getInt(KEY_LAST_VIEWED_PAGE, -1);
     	} else {
     		_current = -1;
     	}
@@ -73,6 +77,9 @@ public class GraphicPageViewerActivity extends Activity {
 
     @Override
     public void onPause() {
+    	
+    	if (_updateTask != null) _updateTask.cancel(false);
+    	
     	super.onPause();
     };
 
@@ -95,7 +102,7 @@ public class GraphicPageViewerActivity extends Activity {
     	}
 
     	//outState.putString(KEY_LAST_VIEWED_COMIC, QC_NAME);
-    	outState.putInt(KEY_LAST_VIEWED_ID, _current);
+    	outState.putInt(KEY_LAST_VIEWED_PAGE, _current);
     };
 
     private OnClickListener ui_newest_Button_Click = new OnClickListener()
@@ -130,8 +137,29 @@ public class GraphicPageViewerActivity extends Activity {
         }
     };
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.view_comic_menu, menu);
+        return true;
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+        case R.id.list_files:
+        	Toast.makeText(getApplicationContext(), "Not suppoted yet.", Toast.LENGTH_SHORT).show();
+            return true;
+        case R.id.jump_to:
+        	Toast.makeText(getApplicationContext(), "Not suppoted yet.", Toast.LENGTH_SHORT).show();
+            return true;
+        case R.id.quit:
+        	finish();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
-	//public void onClick(View v) {
     protected void Update(int action) {
     	if (_updateTask != null) _updateTask.cancel(false);
 		_updateTask = new UpdateTask();
@@ -217,15 +245,15 @@ public class GraphicPageViewerActivity extends Activity {
 				File dir = getFilesDir();
 	    		File file = new File(dir, _comic.GetFileName(_current));
 	    		File xFile = null;
-
+	    		
 		    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-
+		    		
 			    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
-
+		    		
 			    	File xDir = Environment.getExternalStorageDirectory();
 			    	File myDir = new File(xDir, "/Android/data/" + PACKAGE_NAME + "/files/");
 		    		xFile = new File(myDir, _comic.GetFileName(_current));
-		    	
+		    		
 		    	}
 		    	
 	    		if (file.exists()) {
@@ -245,9 +273,9 @@ public class GraphicPageViewerActivity extends Activity {
 	    			
 			    	// Write the bitmap to a file.
 			    	// Todo: buffer and write the file peace by peace instead of loading the whole thing into memory.
-
+			    	
 			    	FileOutputStream out;
-
+			    	
 			    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			    		
 				    	out = new FileOutputStream(file);
@@ -257,7 +285,7 @@ public class GraphicPageViewerActivity extends Activity {
 				    	out = openFileOutput(_comic.GetFileName(_current), Context.MODE_PRIVATE);
 				    	
 			    	}
-
+			    	
 			    	image.compress(CompressFormat.PNG, 75, out);
 			    	out.flush();
 			    	out.close();
@@ -273,6 +301,7 @@ public class GraphicPageViewerActivity extends Activity {
 			return null;
 		}
 
+		@Override
 		protected void onPostExecute(Bitmap result) {
 	     	if (result != null) {
 		     	TextView text = (TextView)findViewById(R.id.ui_info_TextView);
