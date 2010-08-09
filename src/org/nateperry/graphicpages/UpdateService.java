@@ -59,8 +59,7 @@ public class UpdateService extends Service {
         final AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(pending);
 
-        alarm.setRepeating(AlarmManager.RTC, c.getTimeInMillis(),
-        		UPDATE_INTERVAL_MS, pending);
+        alarm.setRepeating(AlarmManager.RTC, c.getTimeInMillis(), UPDATE_INTERVAL_MS, pending);
     }
 
 }
