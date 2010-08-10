@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/jump_to"
+          android:title="@string/jump_to" />
+    <item android:id="@+id/list_files"
+          android:title="@string/list_files" />
+    <item android:id="@+id/quit"
+          android:title="@string/quit" />
+</menu>
