@@ -18,6 +18,8 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 public class Utils {
+	
+	public static final String PACKAGE_NAME = "org.nateperry.graphicpages";
 
 	//public static InputStream wget(String imageUrl)
 	//{

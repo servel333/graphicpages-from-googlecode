@@ -8,7 +8,7 @@ public class QuestionableContentWebComic extends WebComic {
 	//public static final String QC_IMAGE_NAME = R.string.app_full_name + "/" + ID_NAME + "/%s";
 	//public static final String QC_IMAGE_DESCRIPTION = NAME + " comic number %s";
 	public static final String LATEST_REGEX = ".*http://www[.]questionablecontent[.]net/comics/([0-9]+)[.]png.*";
-
+	
 	@Override
 	public String OnGetIdName() {
 		return "QuestionableContent";
@@ -92,10 +92,25 @@ public class QuestionableContentWebComic extends WebComic {
 		return String.format("%s %s", GetName(), id);
 	}
 	
-
 	@Override
 	protected String OnGetFileName(int id) {
 		return this.GetName() + "-" + id + ".png";
+	}
+
+	@Override
+	protected int OnParseFileName(String filename) {
+		
+		int index = -1;
+		filename = filename.replaceAll("^" + this.GetName() + "-", "");
+		filename = filename.replaceAll("[.][a-zA-Z]+$", "");
+		
+		try {
+			index = Integer.parseInt(filename);
+		} catch (NumberFormatException e) {
+			
+		}
+		
+		return index;
 	}
 
 }
