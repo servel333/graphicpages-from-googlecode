@@ -2,10 +2,10 @@ package org.nateperry.graphicpages;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,16 +31,28 @@ public class ListFilesActivity extends ListActivity {
         
         ListView lv = getListView();
         lv.setTextFilterEnabled(true);
-		lv.setOnItemClickListener(ui_ListView_ClickListener);
+		lv.setOnItemClickListener(ui_ListView_OnItemClickListener);
 		
 		Update();
     }
 	
-	private OnItemClickListener ui_ListView_ClickListener =  new OnItemClickListener() {
+	private OnItemClickListener ui_ListView_OnItemClickListener =  new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			
-			// When clicked, show a toast with the TextView text
-			//Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+			Object item = getListAdapter().getItem(position);
+			if (item instanceof WebComicPage) {
+				WebComicPage page = (WebComicPage)item;
+				WebComicInstance.SetIndex(page.GetId());
+				
+				Intent i = new Intent(_thisActivity, GraphicPageViewerActivity.class);
+				i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+	            startActivity(i);
+	            finish();
+			}
+			
+	        //ListView lv = getListView();
+	        //lv.getItemAtPosition(position)
+        	//Intent i = new GoToPageIntent(this, ListFilesActivity.class, );
 			
 		}
 	};
@@ -52,7 +64,7 @@ public class ListFilesActivity extends ListActivity {
     	_updateTask.execute(0);
     };
     
-	private class UpdateTask extends AsyncTask<Integer, Integer, String[]> {
+	private class UpdateTask extends AsyncTask<Integer, Integer, ArrayList<WebComicPage>> {
 
 		@Override
 		protected void onPreExecute () {
@@ -60,10 +72,10 @@ public class ListFilesActivity extends ListActivity {
 		}
 		
 		@Override
-		protected String[] doInBackground(Integer... params) {
+		protected ArrayList<WebComicPage> doInBackground(Integer... params) {
 
 			//String[] files;
-			ArrayList<String> files = new ArrayList<String>();
+			ArrayList<WebComicPage> pages = new ArrayList<WebComicPage>();
 			
 			try {
 				
@@ -75,26 +87,36 @@ public class ListFilesActivity extends ListActivity {
 			    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
 		    		
 			    	File xDirRoot = Environment.getExternalStorageDirectory();
-			    	xDir = new File(xDirRoot, "/Android/data/" + GraphicPageViewerActivity.PACKAGE_NAME + "/files/");
+			    	xDir = new File(xDirRoot, "/Android/data/" + Utils.PACKAGE_NAME + "/files/");
 		    		
 		    	}
 		    	
 		    	if (null != xDir) {
 		    		String[] list = xDir.list();
 		    		if (null != list) {
-				    	files.addAll(Arrays.asList(list));
+		    			
+		    			for (String item : list) {
+		    				pages.add(new WebComicPage(WebComicInstance.GetComic(), item));
+		    			}
+		    			
+				    	//files.addAll(Arrays.asList(list));
 		    		}
 		    	}
 		    	
 		    	if (null != dir) {
 		    		String[] list = dir.list();
 		    		if (null != list) {
-		    			files.addAll(Arrays.asList(list));
+		    			
+		    			for (String item : list) {
+		    				pages.add(new WebComicPage(WebComicInstance.GetComic(), item));
+		    			}
+		    			
+		    			//files.addAll(Arrays.asList(list));
 		    		}
 		    	}
 	    		
-		    	Collections.sort(files);
-		    	return files.toArray(new String[] {});
+		    	Collections.sort(pages, new WebComicPageComparator());
+		    	return pages;
 		    	
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -105,10 +127,10 @@ public class ListFilesActivity extends ListActivity {
 		}
 
 		@Override
-		protected void onPostExecute(String[] files) {
+		protected void onPostExecute(ArrayList<WebComicPage> files) {
 	     	if (files != null) {
 		     	//ListView list = (ListView)findViewById(R.id.ui_files_ListView);
-		        setListAdapter(new ArrayAdapter<String>(_thisActivity, R.layout.list_file, files));
+		        setListAdapter(new ArrayAdapter<WebComicPage>(_thisActivity, R.layout.list_file, files));
 	    	}
 		}
 		

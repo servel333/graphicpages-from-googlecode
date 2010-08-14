@@ -26,19 +26,18 @@ import android.widget.Toast;
 
 public class GraphicPageViewerActivity extends Activity {
 
-	private int _current;
-	public WebComic _comic;
-	public PageTouchListener _touchListener;
+	private PageTouchListener _touchListener;
 	private UpdateTask _updateTask;
 
 	public static final String KEY_LAST_VIEWED_PAGE = "last_viewed_page";
-	public static final String PACKAGE_NAME = "org.nateperry.graphicpages";
 
-	private static final int ACTION_OLDEST = -2;
-	private static final int ACTION_OLDER  = -1;
-	private static final int ACTION_UPDATE =  0;
-	private static final int ACTION_NEWER  =  1;
-	private static final int ACTION_NEWEST =  2;
+	private enum Action {
+		OLDEST, OLDER, UPDATE, NEWER, NEWEST
+	}
+	
+	private enum UpdateState {
+		UPDATED, DOWNLOADING
+	}
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -54,13 +53,19 @@ public class GraphicPageViewerActivity extends Activity {
     	_touchListener = new PageTouchListener();
     	((ImageView)findViewById(R.id.ui_image_ImageView)).setOnTouchListener(_touchListener);
     	
-    	_comic = new QuestionableContentWebComic();
-		
-    	// this.getIntent().getIntExtra(KEY_LAST_VIEWED, DEFAULT_LAST_VIEWED);
-    	if (savedInstanceState != null) {
-    		_current = savedInstanceState.getInt(KEY_LAST_VIEWED_PAGE, -1);
+    	//this.getIntent().getIntExtra(KEY_LAST_VIEWED, DEFAULT_LAST_VIEWED);
+    	
+    	Intent intent = getIntent();
+    	
+    	if (intent instanceof GoToPageIntent) {
+    		setIntent(intent);
+    		WebComicInstance.SetIndex(((GoToPageIntent)intent).GetIndex());
+    		//Update(ACTION_UPDATE);
     	} else {
-    		_current = -1;
+    		
+	    	if (savedInstanceState != null) {
+	    		WebComicInstance.SetIndex(savedInstanceState.getInt(KEY_LAST_VIEWED_PAGE, -1));
+	    	}
     	}
     };
 
@@ -68,14 +73,21 @@ public class GraphicPageViewerActivity extends Activity {
     public void onStart() {
     	super.onStart();
     };
-
+    
     @Override
     public void onResume() {
     	super.onResume();
-
-    	Update(ACTION_UPDATE);
+    	
+    	Intent intent = getIntent();
+    	
+    	if (intent instanceof GoToPageIntent) {
+    		setIntent(intent);
+    		WebComicInstance.SetIndex(((GoToPageIntent)intent).GetIndex());
+    	}
+    	
+    	Update(Action.UPDATE);
     };
-
+    
     @Override
     public void onPause() {
     	
@@ -103,22 +115,33 @@ public class GraphicPageViewerActivity extends Activity {
     	}
 
     	//outState.putString(KEY_LAST_VIEWED_COMIC, QC_NAME);
-    	outState.putInt(KEY_LAST_VIEWED_PAGE, _current);
+    	outState.putInt(KEY_LAST_VIEWED_PAGE, WebComicInstance.GetIndex());
     };
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+    	
+    	if (intent instanceof GoToPageIntent) {
+    		setIntent(intent);
+    		WebComicInstance.SetIndex(((GoToPageIntent)intent).GetIndex());
+    		//Update(ACTION_UPDATE); // Happens in OnResume.
+    	}
+    	
+    };
+    
     private OnClickListener ui_newest_Button_Click = new OnClickListener()
     {
         public void onClick(View v)
         {
-        	Update(ACTION_NEWEST);
+        	Update(Action.NEWEST);
         }
     };
-
+    
     private OnClickListener ui_oldest_Button_Click = new OnClickListener()
     {
         public void onClick(View v)
         {
-        	Update(ACTION_OLDEST);
+        	Update(Action.OLDEST);
         }
     };
 
@@ -126,7 +149,7 @@ public class GraphicPageViewerActivity extends Activity {
     {
         public void onClick(View v)
         {
-        	Update(ACTION_NEWER);
+        	Update(Action.NEWER);
         }
     };
 
@@ -134,7 +157,7 @@ public class GraphicPageViewerActivity extends Activity {
     {
         public void onClick(View v)
         {
-        	Update(ACTION_OLDER);
+        	Update(Action.OLDER);
         }
     };
 
@@ -152,9 +175,6 @@ public class GraphicPageViewerActivity extends Activity {
         	Intent i = new Intent(this, ListFilesActivity.class);
             startActivity(i);
             return true;
-        case R.id.jump_to:
-        	Toast.makeText(getApplicationContext(), "Not suppoted yet.", Toast.LENGTH_SHORT).show();
-            return true;
         case R.id.quit:
         	finish();
             return true;
@@ -163,13 +183,15 @@ public class GraphicPageViewerActivity extends Activity {
         }
     }
 
-    protected void Update(int action) {
+    protected void Update(Action action) {
+    	
     	if (_updateTask != null) _updateTask.cancel(false);
 		_updateTask = new UpdateTask();
     	_updateTask.execute(action);
+    	
     };
 
-	private class UpdateTask extends AsyncTask<Integer, Integer, Bitmap> {
+	private class UpdateTask extends AsyncTask<Action, UpdateState, Bitmap> {
 
 		@Override
 		protected void onPreExecute () {
@@ -177,36 +199,38 @@ public class GraphicPageViewerActivity extends Activity {
 		}
 		
 		@Override
-		protected Bitmap doInBackground(Integer... params) {
+		protected Bitmap doInBackground(Action... params) {
 
 			try {
-				int action = params[0];
+				Action action = params[0];
 				switch (action) {
-					case ACTION_OLDEST:
-			        	_current = _comic.GetOldestId();
+					case OLDEST:
+						WebComicInstance.SetOldestId();
 						break;
-					case ACTION_OLDER:
-			        	_current = _comic.GetOlderId(_current);
+					case OLDER:
+						WebComicInstance.SetOlderId();
 						break;
-					case ACTION_NEWER:
-			        	_current = _comic.GetNewerId(_current);
+					case NEWER:
+						WebComicInstance.SetNewerId();
 						break;
-					case ACTION_NEWEST:
-			        	_current = _comic.GetNewestId(true);
+					case NEWEST:
+						WebComicInstance.SetNewestId(true);
 						break;
 					default: // ACTION_UPDATE
-				    	if (_current == -1) {
-				    		_current = _comic.GetNewestId();
+				    	if (WebComicInstance.GetIndex() == -1) {
+				    		WebComicInstance.SetNewestId();
 				    	}
 						break;
 				}
 				
-				// Check file on disk
+				if (!isCancelled()) { publishProgress(UpdateState.UPDATED); }
+    			
+    			// Check file on disk
 				
 				Bitmap image = null;
 				
 				File dir = getFilesDir();
-	    		File file = new File(dir, _comic.GetFileName(_current));
+	    		File file = new File(dir, WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()));
 	    		File xDir = null;
 	    		File xFile = null;
 	    		
@@ -215,14 +239,14 @@ public class GraphicPageViewerActivity extends Activity {
 			    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
 		    		
 			    	File xRootDir = Environment.getExternalStorageDirectory();
-			    	xDir = new File(xRootDir, "/Android/data/" + PACKAGE_NAME + "/files/");
-		    		xFile = new File(xDir, _comic.GetFileName(_current));
+			    	xDir = new File(xRootDir, "/Android/data/" + Utils.PACKAGE_NAME + "/files/");
+		    		xFile = new File(xDir, WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()));
 		    		
 		    	}
 		    	
 	    		if (file.exists()) {
 	    			
-	    			FileInputStream in = openFileInput(_comic.GetFileName(_current));
+	    			FileInputStream in = openFileInput(WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()));
 	    			image = BitmapFactory.decodeStream(in);
 	    			
 	    			if (null == image) {
@@ -242,7 +266,9 @@ public class GraphicPageViewerActivity extends Activity {
 	    		
 	    		if (null == image) {
 	    			
-			    	String pageUrl = _comic.GetPageUrl(_current);
+					if (!isCancelled()) { publishProgress(UpdateState.DOWNLOADING); }
+					
+			    	String pageUrl = WebComicInstance.GetComic().GetPageUrl(WebComicInstance.GetIndex());
 			    	image = Utils.downloadBitmap(pageUrl);
 	    			
 			    	// Write the bitmap to a file.
@@ -259,7 +285,7 @@ public class GraphicPageViewerActivity extends Activity {
 				    	
 			    	} else {
 			    		
-				    	out = openFileOutput(_comic.GetFileName(_current), Context.MODE_PRIVATE);
+				    	out = openFileOutput(WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()), Context.MODE_PRIVATE);
 				    	
 			    	}
 			    	
@@ -277,24 +303,36 @@ public class GraphicPageViewerActivity extends Activity {
 			
 			return null;
 		}
+		
+		@Override
+		protected void onProgressUpdate (UpdateState... values) {
+			
+			if (values.length > 0) {
+				if (values[0] == UpdateState.UPDATED) {
+					
+			     	TextView text = (TextView)findViewById(R.id.ui_info_TextView);
+			     	text.setText(WebComicInstance.GetComic().GetPageName(WebComicInstance.GetIndex()));
+					
+				} else if (values[0] == UpdateState.DOWNLOADING) {
+					
+					Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_SHORT).show();
+					
+				}
+			}
+			
+		}
 
 		@Override
 		protected void onPostExecute(Bitmap result) {
 	     	if (result != null) {
-		     	TextView text = (TextView)findViewById(R.id.ui_info_TextView);
-		     	text.setText(_comic.GetPageName(_current));
-		     	
-		     	ImageView im = (ImageView)findViewById(R.id.ui_image_ImageView);
+	     		
+	     		ImageView im = (ImageView)findViewById(R.id.ui_image_ImageView);
 	     		im.setImageBitmap(result);
 	     		
 	     		_touchListener.ResetTouch();
 	    	}
 		}
 		
-		@Override
-		protected void onProgressUpdate (Integer... values) {
-			
-		}
 	}
 
 }

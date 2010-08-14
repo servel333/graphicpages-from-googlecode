@@ -14,9 +14,8 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int jump_to=0x7f06000b;
-        public static final int list_files=0x7f06000c;
-        public static final int quit=0x7f06000d;
+        public static final int list_files=0x7f06000b;
+        public static final int quit=0x7f06000c;
         public static final int ui_all_RelativeLayout=0x7f060001;
         public static final int ui_exit_Item=0x7f06000a;
         public static final int ui_files_ListView=0x7f060000;
@@ -30,10 +29,11 @@ public final class R {
         public static final int ui_oldest_Button=0x7f060005;
     }
     public static final class layout {
-        public static final int list_file=0x7f030000;
-        public static final int list_files=0x7f030001;
-        public static final int main=0x7f030002;
-        public static final int view_comic=0x7f030003;
+        public static final int go_to=0x7f030000;
+        public static final int list_file=0x7f030001;
+        public static final int list_files=0x7f030002;
+        public static final int main=0x7f030003;
+        public static final int view_comic=0x7f030004;
     }
     public static final class menu {
         public static final int main_menu=0x7f050000;

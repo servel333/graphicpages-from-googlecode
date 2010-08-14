@@ -8,8 +8,8 @@ public abstract class WebComic { //extends ContentProvider {
 	public static final String URI_NAMESPACE = "GraphicPage";
 	public static final int TIMEOUT_MINS = 30;
 	
-	public Calendar _lastGotNewestId = null;
-	public int _newestId;
+	private Calendar _lastGotNewestId = null;
+	private int _newestId;
 	
 	protected abstract int OnGetNewestId();
 
@@ -116,6 +116,12 @@ public abstract class WebComic { //extends ContentProvider {
 		return OnGetFileName(id);
 	}
 
+	protected abstract int OnParseFileName(String filename);
+	
+	public final int ParseFileName(String filename) {
+		return OnParseFileName(filename);
+	}
+	
 	protected String OnGetFullName() {
 		return R.string.app_full_name + "." + GetIdName();
 	}
