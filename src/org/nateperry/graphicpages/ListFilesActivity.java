@@ -10,10 +10,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ListFilesActivity extends ListActivity {
@@ -57,13 +61,28 @@ public class ListFilesActivity extends ListActivity {
 		}
 	};
 
-	//public void onClick(View v) {
     protected void Update() {
     	if (_updateTask != null) _updateTask.cancel(false);
 		_updateTask = new UpdateTask();
     	_updateTask.execute(0);
     };
-    
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.list_files_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.purge:
+        	Toast.makeText(getApplicationContext(), "Not yet implemented.", Toast.LENGTH_SHORT).show();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
 	private class UpdateTask extends AsyncTask<Integer, Integer, ArrayList<WebComicPage>> {
 
 		@Override
