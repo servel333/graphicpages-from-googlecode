@@ -3,6 +3,6 @@
     
     <item android:id="@+id/list_files"
           android:title="@string/list_files" />
-    <item android:id="@+id/quit"
-          android:title="@string/quit" />
+    
+
 </menu>
