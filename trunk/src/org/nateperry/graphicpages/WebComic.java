@@ -11,6 +11,18 @@ public abstract class WebComic { //extends ContentProvider {
 	private Calendar _lastGotNewestId = null;
 	private int _newestId;
 	
+	public WebComic() {
+		
+	}
+	
+	public WebComic(WebComic comic) {
+		_lastGotNewestId = (Calendar)comic._lastGotNewestId.clone();
+		_newestId = comic._newestId;
+	}
+	
+	@Override
+	public abstract Object clone();
+	
 	protected abstract int OnGetNewestId();
 
 	public final int GetNewestId() {

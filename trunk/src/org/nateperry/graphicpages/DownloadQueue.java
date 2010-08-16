@@ -1,61 +1,65 @@
-package org.nateperry.graphicpages;
-
-import java.util.ArrayList;
-
-import android.os.AsyncTask;
-import android.os.AsyncTask.Status;
-
-public class DownloadQueue {
-	
-	private volatile ArrayList<DownloadItem> _list;
-	private volatile DownloadTask _downloadTask;
-	
-	private enum DownloadTaskStatus {
-		STARTING, FINISHED
-	}
-
-	public DownloadQueue() {
-		_list = new ArrayList<DownloadItem>();
-		_downloadTask = new DownloadTask();
-	}
-	
-	public synchronized void AddItem(DownloadItem item) {
-		_list.add(item);
-		Start();
-	}
-	
-	public synchronized void Start() {
-		
-		if (_downloadTask == null) {
-			
-			_downloadTask = new DownloadTask();
-			
-		} else {
-			if (_downloadTask.isCancelled()) {
-				
-				_downloadTask = new DownloadTask();
-				
-			} else if (_downloadTask.getStatus() != Status.RUNNING) {
-				
-				_downloadTask.cancel(true);
-				_downloadTask = new DownloadTask();
-				
-			}
-		}
-		
-		_downloadTask.execute();
-	}
-	
-
-	private class DownloadTask extends AsyncTask<Integer, DownloadTaskStatus, Integer> {
-
-		@Override
-		protected void onPreExecute () {
-			
-		}
-		
-		@Override
-		protected Integer doInBackground(Integer... params) {
+//package org.nateperry.graphicpages;
+//
+//import java.io.File;
+//import java.io.FileOutputStream;
+//import java.util.ArrayList;
+//
+//import android.os.AsyncTask;
+//import android.os.Environment;
+//import android.os.AsyncTask.Status;
+//
+//public class DownloadQueue {
+//	
+//	private volatile ArrayList<DownloadItem> _list;
+//	private volatile DownloadTask _downloadTask;
+//	
+//	private enum DownloadTaskStatus {
+//		STARTING, FINISHED
+//	}
+//
+//	public DownloadQueue() {
+//		_list = new ArrayList<DownloadItem>();
+//		_downloadTask = new DownloadTask();
+//	}
+//	
+//	public synchronized void AddItem(DownloadItem item) {
+//		_list.add(item);
+//		Start();
+//	}
+//	
+//	public synchronized void Start() {
+//		
+//		if (_downloadTask == null) {
+//			
+//			_downloadTask = new DownloadTask();
+//			_downloadTask.execute();
+//			
+//		} else {
+//			if (_downloadTask.isCancelled()) {
+//				
+//				_downloadTask = new DownloadTask();
+//				_downloadTask.execute();
+//				
+//			} else if (_downloadTask.getStatus() != Status.RUNNING) {
+//				
+//				_downloadTask.cancel(true);
+//				_downloadTask = new DownloadTask();
+//				_downloadTask.execute();
+//				
+//			}
+//		}
+//	}
+//	
+//
+//	private class DownloadTask extends AsyncTask<Integer, DownloadTaskStatus, Integer> {
+//
+//		@Override
+//		protected void onPreExecute () {
+//			
+//		}
+//		
+//		@Override
+//		protected Integer doInBackground(Integer... params) {
 //
 //			try {
 //				
@@ -73,7 +77,7 @@ public class DownloadQueue {
 //				    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
 //			    		
 //				    	File xRootDir = Environment.getExternalStorageDirectory();
-//				    	xDir = new File(xRootDir, "/Android/data/" + Utils.PACKAGE_NAME + "/files/");
+//				    	xDir = new File(xRootDir, Globals.EXTERNALwe);
 //			    		xFile = new File(xDir, WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()));
 //			    		
 //			    	}
@@ -118,40 +122,40 @@ public class DownloadQueue {
 //				e.printStackTrace();
 //				Log.w("downloading", e);
 //			}
-			
-			return null;
-		}
-		
-		@Override
-		protected void onProgressUpdate (DownloadTaskStatus... values) {
-			
-			//if (values.length > 0) {
-			//	if (values[0] == DownloadTaskStatus.FINISHED) {
-			//		
-			//		TextView text = (TextView)findViewById(R.id.ui_info_TextView);
-			//     	text.setText(WebComicInstance.GetComic().GetPageName(WebComicInstance.GetIndex()));
-			//		
-			//	} else if (values[0] == UPDATE_STATE_DOWNLOADING) {
-			//		
-			//		Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_SHORT).show();
-			//		
-			//	}
-			//}
-			
-		}
-
-		@Override
-		protected void onPostExecute(Integer result) {
-	     	//if (result != null) {
-	     	//	
-	     	//	ImageView im = (ImageView)findViewById(R.id.ui_image_ImageView);
-	     	//	im.setImageBitmap(result);
-	     	//	
-	     	//	_touchListener.ResetTouch();
-	    	//}
-		}
-		
-	}
-
-	
-}
+//			
+//			return null;
+//		}
+//		
+//		@Override
+//		protected void onProgressUpdate (DownloadTaskStatus... values) {
+//			
+//			//if (values.length > 0) {
+//			//	if (values[0] == DownloadTaskStatus.FINISHED) {
+//			//		
+//			//		TextView text = (TextView)findViewById(R.id.ui_info_TextView);
+//			//     	text.setText(WebComicInstance.GetComic().GetPageName(WebComicInstance.GetIndex()));
+//			//		
+//			//	} else if (values[0] == UPDATE_STATE_DOWNLOADING) {
+//			//		
+//			//		Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_SHORT).show();
+//			//		
+//			//	}
+//			//}
+//			
+//		}
+//
+//		@Override
+//		protected void onPostExecute(Integer result) {
+//	     	//if (result != null) {
+//	     	//	
+//	     	//	ImageView im = (ImageView)findViewById(R.id.ui_image_ImageView);
+//	     	//	im.setImageBitmap(result);
+//	     	//	
+//	     	//	_touchListener.ResetTouch();
+//	    	//}
+//		}
+//		
+//	}
+//
+//	
+//}

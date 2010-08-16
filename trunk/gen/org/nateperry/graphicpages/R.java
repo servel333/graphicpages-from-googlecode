@@ -14,15 +14,14 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int list_files=0x7f06000b;
-        public static final int quit=0x7f06000c;
+        public static final int list_files=0x7f06000a;
+        public static final int quit=0x7f06000b;
         public static final int ui_all_RelativeLayout=0x7f060001;
-        public static final int ui_exit_Item=0x7f06000a;
+        public static final int ui_exit_Item=0x7f060009;
         public static final int ui_files_ListView=0x7f060000;
-        public static final int ui_image_ImageView=0x7f060009;
-        public static final int ui_info_TextView=0x7f060003;
+        public static final int ui_image_ImageView=0x7f060003;
+        public static final int ui_info_TextView=0x7f060002;
         public static final int ui_nav_RelativeLayout=0x7f060004;
-        public static final int ui_navbox_RelativeLayout=0x7f060002;
         public static final int ui_newer_Button=0x7f060008;
         public static final int ui_newest_Button=0x7f060007;
         public static final int ui_older_Button=0x7f060006;
