@@ -87,7 +87,7 @@ public class ListFilesActivity extends ListActivity {
 			    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
 		    		
 			    	File xDirRoot = Environment.getExternalStorageDirectory();
-			    	xDir = new File(xDirRoot, "/Android/data/" + Utils.PACKAGE_NAME + "/files/");
+			    	xDir = new File(xDirRoot, Globals.EXTERNAL_DATA_FOLDER);
 		    		
 		    	}
 		    	

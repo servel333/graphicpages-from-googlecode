@@ -1,28 +1,31 @@
 package org.nateperry.graphicpages;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 public class DownloadItem {
 	
-	private URL _url;
+	private String _url;
 	private WebComicPage _page;
 	
-	public DownloadItem(URL url, WebComicPage page) {
+	public DownloadItem(String url, WebComicPage page) {
 		_url = url;
 		_page = page;
 	}
-
-	public DownloadItem(String url) throws MalformedURLException {
-		_url = new URL(url);
+	
+	public DownloadItem(DownloadItem item) {
+		_url = new String(item._url);
+		_page = (WebComicPage)item._page.clone();
 	}
 	
-	public URL GetUrl() {
+	public String GetUrl() {
 		return _url;
 	}
 	
 	public WebComicPage GetPage() {
 		return _page;
+	}
+	
+	@Override
+	public Object clone() {
+		return new DownloadItem(this);
 	}
 	
 }

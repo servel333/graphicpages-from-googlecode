@@ -9,6 +9,14 @@ public class QuestionableContentWebComic extends WebComic {
 	//public static final String QC_IMAGE_DESCRIPTION = NAME + " comic number %s";
 	public static final String LATEST_REGEX = ".*http://www[.]questionablecontent[.]net/comics/([0-9]+)[.]png.*";
 	
+	public QuestionableContentWebComic() {
+		super();
+	}
+	
+	public QuestionableContentWebComic(QuestionableContentWebComic comic) {
+		super(comic);
+	}
+	
 	@Override
 	public String OnGetIdName() {
 		return "QuestionableContent";
@@ -111,6 +119,11 @@ public class QuestionableContentWebComic extends WebComic {
 		}
 		
 		return index;
+	}
+
+	@Override
+	public Object clone() {
+		return new QuestionableContentWebComic(this);
 	}
 
 }

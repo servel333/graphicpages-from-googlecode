@@ -25,12 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class GraphicPageViewerActivity extends Activity {
-
+	
 	private PageTouchListener _touchListener;
 	private UpdateTask _updateTask;
-
+	
 	public static final String KEY_LAST_VIEWED_PAGE = "last_viewed_page";
-
+	
 	private enum Action {
 		OLDEST, OLDER, UPDATE, NEWER, NEWEST
 	}
@@ -38,7 +38,7 @@ public class GraphicPageViewerActivity extends Activity {
 	private enum UpdateState {
 		UPDATED, DOWNLOADING
 	}
-
+	
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -68,7 +68,7 @@ public class GraphicPageViewerActivity extends Activity {
 	    	}
     	}
     };
-
+    
     @Override
     public void onStart() {
     	super.onStart();
@@ -87,7 +87,7 @@ public class GraphicPageViewerActivity extends Activity {
     	
     	Update(Action.UPDATE);
     };
-    
+	
     @Override
     public void onPause() {
     	
@@ -95,17 +95,17 @@ public class GraphicPageViewerActivity extends Activity {
     	
     	super.onPause();
     };
-
+    
     @Override
     public void onStop() {
     	super.onStop();
     };
-
+    
     @Override
     public void onDestroy() {
     	super.onDestroy();
     }
-
+    
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
@@ -117,7 +117,7 @@ public class GraphicPageViewerActivity extends Activity {
     	//outState.putString(KEY_LAST_VIEWED_COMIC, QC_NAME);
     	outState.putInt(KEY_LAST_VIEWED_PAGE, WebComicInstance.GetIndex());
     };
-
+    
     @Override
     protected void onNewIntent(Intent intent) {
     	
@@ -144,7 +144,7 @@ public class GraphicPageViewerActivity extends Activity {
         	Update(Action.OLDEST);
         }
     };
-
+    
     private OnClickListener ui_newer_Button_Click = new OnClickListener()
     {
         public void onClick(View v)
@@ -152,7 +152,7 @@ public class GraphicPageViewerActivity extends Activity {
         	Update(Action.NEWER);
         }
     };
-
+    
     private OnClickListener ui_older_Button_Click = new OnClickListener()
     {
         public void onClick(View v)
@@ -160,7 +160,7 @@ public class GraphicPageViewerActivity extends Activity {
         	Update(Action.OLDER);
         }
     };
-
+    
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.view_comic_menu, menu);
@@ -182,7 +182,7 @@ public class GraphicPageViewerActivity extends Activity {
             return super.onOptionsItemSelected(item);
         }
     }
-
+    
     protected void Update(Action action) {
     	
     	if (_updateTask != null) _updateTask.cancel(false);
@@ -190,9 +190,9 @@ public class GraphicPageViewerActivity extends Activity {
     	_updateTask.execute(action);
     	
     };
-
+    
 	private class UpdateTask extends AsyncTask<Action, UpdateState, Bitmap> {
-
+		
 		@Override
 		protected void onPreExecute () {
 			
@@ -239,7 +239,7 @@ public class GraphicPageViewerActivity extends Activity {
 			    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
 		    		
 			    	File xRootDir = Environment.getExternalStorageDirectory();
-			    	xDir = new File(xRootDir, "/Android/data/" + Utils.PACKAGE_NAME + "/files/");
+			    	xDir = new File(xRootDir, Globals.EXTERNAL_DATA_FOLDER);
 		    		xFile = new File(xDir, WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()));
 		    		
 		    	}
@@ -321,7 +321,7 @@ public class GraphicPageViewerActivity extends Activity {
 			}
 			
 		}
-
+		
 		@Override
 		protected void onPostExecute(Bitmap result) {
 	     	if (result != null) {
@@ -332,7 +332,6 @@ public class GraphicPageViewerActivity extends Activity {
 	     		_touchListener.ResetTouch();
 	    	}
 		}
-		
 	}
-
+	
 }
