@@ -115,7 +115,7 @@ public class GraphicPageViewerActivity extends Activity {
     	}
 
     	//outState.putString(KEY_LAST_VIEWED_COMIC, QC_NAME);
-    	outState.putInt(KEY_LAST_VIEWED_PAGE, WebComicInstance.GetIndex());
+    	outState.putInt(KEY_LAST_VIEWED_PAGE, WebComicInstance.getIndex());
     };
 
     @Override
@@ -212,7 +212,7 @@ public class GraphicPageViewerActivity extends Activity {
 						WebComicInstance.SetNewestId(true);
 						break;
 					default: // ACTION_UPDATE
-				    	if (WebComicInstance.GetIndex() == -1) {
+				    	if (WebComicInstance.getIndex() == -1) {
 				    		WebComicInstance.SetNewestId();
 				    	}
 						break;
@@ -225,7 +225,7 @@ public class GraphicPageViewerActivity extends Activity {
 				Bitmap image = null;
 				
 				File dir = getFilesDir();
-	    		File file = new File(dir, WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()));
+	    		File file = new File(dir, WebComicInstance.getLot().GetFileName(WebComicInstance.getIndex()));
 	    		File xDir = null;
 	    		File xFile = null;
 	    		
@@ -235,13 +235,13 @@ public class GraphicPageViewerActivity extends Activity {
 		    		
 			    	File xRootDir = Environment.getExternalStorageDirectory();
 			    	xDir = new File(xRootDir, Globals.EXTERNAL_DATA_FOLDER);
-		    		xFile = new File(xDir, WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()));
+		    		xFile = new File(xDir, WebComicInstance.getLot().GetFileName(WebComicInstance.getIndex()));
 		    		
 		    	}
 		    	
 	    		if (file.exists()) {
 	    			
-	    			FileInputStream in = openFileInput(WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()));
+	    			FileInputStream in = openFileInput(WebComicInstance.getLot().GetFileName(WebComicInstance.getIndex()));
 	    			image = BitmapFactory.decodeStream(in);
 	    			
 	    			if (null == image) {
@@ -263,7 +263,7 @@ public class GraphicPageViewerActivity extends Activity {
 	    			
 					if (!isCancelled()) { publishProgress(UpdateState.DOWNLOADING); }
 					
-			    	String pageUrl = WebComicInstance.GetComic().GetPageUrl(WebComicInstance.GetIndex());
+			    	String pageUrl = WebComicInstance.getLot().GetPageUrl(WebComicInstance.getIndex());
 			    	image = Utils.downloadBitmap(pageUrl);
 	    			
 			    	// Write the bitmap to a file.
@@ -280,7 +280,7 @@ public class GraphicPageViewerActivity extends Activity {
 				    	
 			    	} else {
 			    		
-				    	out = openFileOutput(WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()), Context.MODE_PRIVATE);
+				    	out = openFileOutput(WebComicInstance.getLot().GetFileName(WebComicInstance.getIndex()), Context.MODE_PRIVATE);
 				    	
 			    	}
 			    	
@@ -306,7 +306,7 @@ public class GraphicPageViewerActivity extends Activity {
 				if (values[0] == UpdateState.UPDATED) {
 					
 			     	TextView text = (TextView)findViewById(R.id.ui_info_TextView);
-			     	text.setText(WebComicInstance.GetComic().GetPageName(WebComicInstance.GetIndex()));
+			     	text.setText(WebComicInstance.getLot().GetPageName(WebComicInstance.getIndex()));
 					
 				} else if (values[0] == UpdateState.DOWNLOADING) {
 					

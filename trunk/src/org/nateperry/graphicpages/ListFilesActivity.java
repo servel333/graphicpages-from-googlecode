@@ -115,7 +115,7 @@ public class ListFilesActivity extends ListActivity {
 		    		if (null != list) {
 		    			
 		    			for (String item : list) {
-		    				pages.add(new WebComicPage(WebComicInstance.GetComic(), item));
+		    				pages.add(new WebComicPage(WebComicInstance.getLot(), item));
 		    			}
 		    			
 				    	//files.addAll(Arrays.asList(list));
@@ -127,7 +127,7 @@ public class ListFilesActivity extends ListActivity {
 		    		if (null != list) {
 		    			
 		    			for (String item : list) {
-		    				pages.add(new WebComicPage(WebComicInstance.GetComic(), item));
+		    				pages.add(new WebComicPage(WebComicInstance.getLot(), item));
 		    			}
 		    			
 		    			//files.addAll(Arrays.asList(list));
