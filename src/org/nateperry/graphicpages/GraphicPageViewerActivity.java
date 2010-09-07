@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import org.nateperry.library.NumericImageLot;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +30,8 @@ public class GraphicPageViewerActivity extends Activity {
 
 	private PageTouchListener _touchListener;
 	private UpdateTask _updateTask;
+	protected NumericImageLot _lot;
+	protected Integer _index = -1;
 
 	public static final String KEY_LAST_VIEWED_PAGE = "last_viewed_page";
 
@@ -44,29 +48,29 @@ public class GraphicPageViewerActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_comic);
-        
+
      	((Button)findViewById(R.id.ui_newest_Button)).setOnClickListener(ui_newest_Button_Click);
     	((Button)findViewById(R.id.ui_oldest_Button)).setOnClickListener(ui_oldest_Button_Click);
     	((Button)findViewById(R.id.ui_newer_Button)).setOnClickListener(ui_newer_Button_Click);
     	((Button)findViewById(R.id.ui_older_Button)).setOnClickListener(ui_older_Button_Click);
-    	
+
     	_touchListener = new PageTouchListener();
     	((ImageView)findViewById(R.id.ui_image_ImageView)).setOnTouchListener(_touchListener);
-    	
+
     	//this.getIntent().getIntExtra(KEY_LAST_VIEWED, DEFAULT_LAST_VIEWED);
-    	
-    	Intent intent = getIntent();
-    	
-    	if (intent instanceof GoToPageIntent) {
-    		setIntent(intent);
-    		WebComicInstance.SetIndex(((GoToPageIntent)intent).GetIndex());
-    		//Update(ACTION_UPDATE);
-    	} else {
-    		
-	    	if (savedInstanceState != null) {
-	    		WebComicInstance.SetIndex(savedInstanceState.getInt(KEY_LAST_VIEWED_PAGE, -1));
-	    	}
-    	}
+
+//    	Intent intent = getIntent();
+//
+//    	if (intent instanceof GoToPageIntent) {
+//    		setIntent(intent);
+//    		WebComicInstance.SetIndex(((GoToPageIntent)intent).GetIndex());
+//    		//Update(ACTION_UPDATE);
+//    	} else {
+//
+//	    	if (savedInstanceState != null) {
+//	    		WebComicInstance.SetIndex(savedInstanceState.getInt(KEY_LAST_VIEWED_PAGE, -1));
+//	    	}
+//    	}
     };
 
     @Override
@@ -77,22 +81,28 @@ public class GraphicPageViewerActivity extends Activity {
     @Override
     public void onResume() {
     	super.onResume();
-    	
+
     	Intent intent = getIntent();
-    	
+
     	if (intent instanceof GoToPageIntent) {
     		setIntent(intent);
-    		WebComicInstance.SetIndex(((GoToPageIntent)intent).GetIndex());
+
+    		GoToPageIntent g = (GoToPageIntent) intent;
+
+    		_lot = g.getLot();
+    		_index = g.getIndex();
+    	} else {
+
     	}
-    	
+
     	Update(Action.UPDATE);
     };
 
     @Override
     public void onPause() {
-    	
+
     	if (_updateTask != null) _updateTask.cancel(false);
-    	
+
     	super.onPause();
     };
 
@@ -103,6 +113,9 @@ public class GraphicPageViewerActivity extends Activity {
 
     @Override
     public void onDestroy() {
+
+    	if (_updateTask != null) _updateTask.cancel(true);
+
     	super.onDestroy();
     }
 
@@ -115,18 +128,22 @@ public class GraphicPageViewerActivity extends Activity {
     	}
 
     	//outState.putString(KEY_LAST_VIEWED_COMIC, QC_NAME);
-    	outState.putInt(KEY_LAST_VIEWED_PAGE, WebComicInstance.getIndex());
+    	outState.putInt(KEY_LAST_VIEWED_PAGE, _index);
     };
 
     @Override
     protected void onNewIntent(Intent intent) {
-    	
+
     	if (intent instanceof GoToPageIntent) {
     		setIntent(intent);
-    		WebComicInstance.SetIndex(((GoToPageIntent)intent).GetIndex());
+
+    		GoToPageIntent g = (GoToPageIntent) intent;
+
+    		_lot = g.getLot();
+    		_index = g.getIndex();
+
     		//Update(ACTION_UPDATE); // Happens in OnResume.
-    	}
-    	
+		}
     };
 
     private OnClickListener ui_newest_Button_Click = new OnClickListener()
