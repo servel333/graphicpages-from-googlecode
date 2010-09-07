@@ -1,16 +1,21 @@
-//package org.nateperry.graphicpages;
-//
-//public class DownloadQueueInstance {
-//
-//	private static volatile DownloadQueue _queue;
-//	
-//	public static DownloadQueue Queue() {
-//		
-//		if (_queue == null) {
-//			_queue = new DownloadQueue();
-//		}
-//		
-//		return _queue;
-//	}
-//	
-//}
+package org.nateperry.graphicpages;
+
+import android.content.ContextWrapper;
+
+public class DownloadQueueInstance {
+
+	private static volatile DownloadQueue _queue;
+
+	public static void InitializeQueue(ContextWrapper context) {
+
+		if (_queue == null) {
+			_queue = new DownloadQueue(context);
+		}
+	}
+
+	public static DownloadQueue Queue() {
+
+		return _queue;
+	}
+
+}
