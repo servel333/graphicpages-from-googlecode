@@ -254,7 +254,6 @@ public class GraphicPageViewerActivity extends Activity {
 				} else {
 					publishProgress(UpdateState.UPDATED);
 				}
-
 				
 
 
