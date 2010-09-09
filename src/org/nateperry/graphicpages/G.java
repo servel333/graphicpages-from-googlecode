@@ -2,7 +2,7 @@ package org.nateperry.graphicpages;
 
 import android.content.ContextWrapper;
 
-public class DownloadQueueInstance {
+public class G {
 
 	private static volatile DownloadQueue _queue;
 
