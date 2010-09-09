@@ -17,18 +17,29 @@ public abstract class ImageLotIndex<indexType> {
 		_index = index;
 	}
 
-	//protected abstract indexType getDefaultIndex();
-
 	public ImageLot<indexType> getLot() {
 		return _lot;
 	}
 
-	public indexType getIndex() {
+	public indexType get() {
 		return _index;
 	}
 
-	public void setIndex(indexType index) {
+	public void set(indexType index) {
 		_index = index;
+		_index = _lot.getValidIndex(_index);
+	}
+
+	public void change(indexType amount) {
+		_index = _lot.changeIndex(_index, amount);
+	}
+
+	public void setToOldest() {
+		_index = _lot.getOldestIndex();
+	}
+
+	public void setToNewest() {
+		_index = _lot.getNewestIndex();
 	}
 
 }

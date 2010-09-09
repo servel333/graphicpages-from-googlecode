@@ -13,8 +13,8 @@ public class MegaTokyoImageLot extends NumericImageLot {
 	//http://megatokyo.com/strips/
 	//http://megatokyo.com/strips/1281.gif
 	protected static final String LATEST_REGEX = "src=\"strips[/]([0-9]+).gif\"";
-	protected static final Integer DEFAULT_INDEX = 1;
 	protected static final Integer OLDEST_INDEX = 1;
+	protected static final Integer DEFAULT_INDEX = OLDEST_INDEX;
 
 	public MegaTokyoImageLot() {
 		super();
@@ -109,17 +109,6 @@ public class MegaTokyoImageLot extends NumericImageLot {
 	}
 
 	@Override
-	protected Integer onMoveIndex(Integer index, int count) {
-		index += count;
-
-		/// TODO: check bounds here.
-
-		//if (index <= )
-
-		return index;
-	}
-
-	@Override
 	protected Integer onParseFileName(String filename) {
 
 		int index = -1;
@@ -134,6 +123,5 @@ public class MegaTokyoImageLot extends NumericImageLot {
 
 		return index;
 	}
-
 
 }
