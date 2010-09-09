@@ -1,18 +1,17 @@
 package org.nateperry.graphicpages;
 
 import org.nateperry.library.NumericImageLot;
+import org.nateperry.library.NumericImageLotIndex;
 
 import android.content.Context;
 import android.content.Intent;
 
 public class GoToPageIntent extends Intent {
 
-	protected NumericImageLot _lot;
-	protected Integer _index;
+	protected NumericImageLotIndex _index;
 
-	public GoToPageIntent(NumericImageLot lot, Integer index) {
+	public GoToPageIntent(NumericImageLotIndex index) {
 		super();
-		_lot = lot;
 		_index = index;
 	}
 
@@ -24,7 +23,7 @@ public class GoToPageIntent extends Intent {
 
 	//public GoToPageIntent(String action, Uri uri) {};
 
-	public GoToPageIntent(Context packageContext, Class<?> cls, NumericImageLot lot, Integer index) {
+	public GoToPageIntent(Context packageContext, Class<?> cls, NumericImageLotIndex index) {
 		super(packageContext, cls);
 		_index = index;
 	};
@@ -32,10 +31,10 @@ public class GoToPageIntent extends Intent {
 	//public GoToPageIntent(String action, Uri uri, Context packageContext, Class<?> cls) {};
 
 	public NumericImageLot getLot() {
-		return _lot;
+		return _index.getLot();
 	}
 
-	public Integer getIndex() {
+	public NumericImageLotIndex getIndex() {
 		return _index;
 	}
 

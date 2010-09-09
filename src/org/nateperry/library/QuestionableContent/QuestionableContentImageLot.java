@@ -13,8 +13,8 @@ public class QuestionableContentImageLot extends NumericImageLot {
 	//public static final String QC_IMAGE_NAME = R.string.app_full_name + "/" + ID_NAME + "/%s";
 	//public static final String QC_IMAGE_DESCRIPTION = NAME + " comic number %s";
 	protected static final String LATEST_REGEX = ".*http://www[.]questionablecontent[.]net/comics/([0-9]+)[.]png.*";
-	protected static final Integer DEFAULT_INDEX = 1;
 	protected static final Integer OLDEST_INDEX = 1;
+	protected static final Integer DEFAULT_INDEX = OLDEST_INDEX;
 
 	public QuestionableContentImageLot() {
 		super();
@@ -106,17 +106,6 @@ public class QuestionableContentImageLot extends NumericImageLot {
 	@Override
 	protected String onGetUrl() {
 		return "http://www.questionablecontent.net";
-	}
-
-	@Override
-	protected Integer onMoveIndex(Integer index, int count) {
-		index += count;
-
-		/// TODO: check bounds here.
-
-		//if (index <= )
-
-		return index;
 	}
 
 	@Override
