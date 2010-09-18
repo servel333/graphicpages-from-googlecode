@@ -16,5 +16,5 @@
 <string name="jump_to">Jump to page</string>
 <string name="list_files">List Files and Go-to</string>
 <string name="quit">Quit</string>
-<string name="purge">Purge files</string>
+<string name="purge">Purge all files</string>
 </resources>
