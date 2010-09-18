@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="org.nateperry.graphicpages"
-      android:versionCode="1"
-      android:versionName="1.2">
+      package="org.nateperry.graphicpages.single.questionablecontent" android:versionName="1.3" android:versionCode="2">
       <!--
       android:installLocation="auto">
       -->

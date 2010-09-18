@@ -1,4 +1,4 @@
-package org.nateperry.graphicpages;
+package org.nateperry.graphicpages.single.questionablecontent;
 
 import android.content.Context;
 import android.content.Intent;

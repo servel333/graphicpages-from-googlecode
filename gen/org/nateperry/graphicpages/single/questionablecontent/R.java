@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package org.nateperry.graphicpages;
+package org.nateperry.graphicpages.single.questionablecontent;
 
 public final class R {
     public static final class attr {
@@ -44,16 +44,14 @@ public final class R {
         public static final int app_full_name=0x7f040001;
         public static final int app_name=0x7f040000;
         public static final int date=0x7f040006;
-        public static final int dynamic_bookmark=0x7f040007;
-        public static final int dynamic_boookmark_description=0x7f040008;
-        public static final int jump_to=0x7f04000a;
-        public static final int list_files=0x7f04000b;
+        public static final int jump_to=0x7f040008;
+        public static final int list_files=0x7f040009;
         public static final int newer=0x7f040003;
         public static final int newest=0x7f040002;
-        public static final int number=0x7f040009;
+        public static final int number=0x7f040007;
         public static final int older=0x7f040004;
         public static final int oldest=0x7f040005;
-        public static final int purge=0x7f04000d;
-        public static final int quit=0x7f04000c;
+        public static final int purge=0x7f04000b;
+        public static final int quit=0x7f04000a;
     }
 }
