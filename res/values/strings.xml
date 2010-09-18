@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <string name="app_name">GraphicPages</string>
+    <string name="app_name">Questionable Content - GraphicPages Special Edition</string>
 <string name="app_full_name">org.nateperry.graphicpages.single.questionablecontent</string><string name="newest">Newest</string><string name="newer">Newer</string>
 <string name="older">Older</string><string name="oldest">Oldest</string>
 <string name="date">Date</string>
