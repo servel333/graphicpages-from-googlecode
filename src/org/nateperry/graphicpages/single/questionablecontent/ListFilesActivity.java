@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,7 @@ public class ListFilesActivity extends ListActivity {
 
 	private ArrayAdapter<WrappedFile> _Adapter;
 	private UpdateAsyncTask _updateTask;
-	//private PurgeFilesAsyncTask _purgeTask;
+	private PurgeFilesAsyncTask _purgeTask;
 	private ListFilesActivity _Activity;
 
 	@Override
@@ -53,21 +54,7 @@ public class ListFilesActivity extends ListActivity {
 				int position, 
 				long id) {
 
-			Object item = getListAdapter().getItem(position);
-			if (item instanceof WebComicPage) {
-
-				WebComicPage page = (WebComicPage)item;
-				WebComicInstance.SetIndex(page.GetId());
-
-				Intent i = new Intent(_Activity, GraphicPageViewerActivity.class);
-				i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-	            startActivity(i);
-	            finish();
-			}
-
-	        //ListView lv = getListView();
-	        //lv.getItemAtPosition(position)
-        	//Intent i = new GoToPageIntent(this, ListFilesActivity.class, );
+			viewItem(position);
 
 		};
 
@@ -133,53 +120,78 @@ public class ListFilesActivity extends ListActivity {
 
         switch (item.getItemId()) {
 	        case R.id.delete_item:
-	        	deleteItem(info.id);
+	        	deleteItem(info.position);
 	            return true;
 	        case R.id.view_item:
-	        	viewItem(info.id);
+	        	viewItem(info.position);
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
         }
     };
 
-	public void deleteItem(long Id) {
-    }
+	public void deleteItem(int position) {
 
-	private void viewItem(long id) {
-	}
+		Object item = getListAdapter().getItem(position);
+		if (item instanceof WrappedFile) {
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.list_files_menu, menu);
-//        return true;
-//    };
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//        case R.id.purge:
-//        	purgeAllItems();
-//            return true;
-//        default:
-//            return super.onOptionsItemSelected(item);
-//        }
-//    };
+			WrappedFile file = (WrappedFile)item;
+			file.delete();
+			Update();
 
-//    protected void purgeAllItems() {
-//
-//       	if (_purgeTask != null) _purgeTask.cancel(false);
-//       	_purgeTask = new PurgeFilesAsyncTask();
-//       	_purgeTask.execute();
-//    };
+		}
+    };
+
+	private void viewItem(int position) {
+
+		Object item = getListAdapter().getItem(position);
+		if (item instanceof WrappedFile) {
+
+			WrappedFile file = (WrappedFile)item;
+			WebComicPage page = new WebComicPage(WebComicInstance.GetComic(), file.getName());
+			WebComicInstance.SetIndex(page.GetId());
+
+			GoToPageIntent i = new GoToPageIntent(_Activity, GraphicPageViewerActivity.class, page.GetId());
+			i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(i);
+            finish();
+
+		}
+	};
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.list_files_menu, menu);
+        return true;
+    };
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.purge:
+        	purgeAllItems();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    };
+
+    protected void purgeAllItems() {
+
+       	if (_purgeTask != null) _purgeTask.cancel(false);
+       	_purgeTask = new PurgeFilesAsyncTask();
+       	_purgeTask.execute();
+    };
 
 	private class UpdateAsyncTask extends AsyncTask<Boolean, WrappedFile, Boolean> {
 
 		@Override
 		protected void onPreExecute () {
 
-        	Toast.makeText(getApplicationContext(), "Updateing list...", Toast.LENGTH_SHORT).show();
+        	Toast.makeText(getApplicationContext(), "Loading list...", Toast.LENGTH_SHORT).show();
+        	_Adapter.clear();
 		};
 
 		@Override
@@ -246,76 +258,76 @@ public class ListFilesActivity extends ListActivity {
 		};
 
 	};
-//
-//	private class PurgeFilesAsyncTask extends AsyncTask<Boolean, Boolean, Boolean> {
-//
-//		@Override
-//		protected void onPreExecute() {
-//
-//        	Toast.makeText(getApplicationContext(), "Purging.", Toast.LENGTH_SHORT).show();
-//		};
-//
-//		@Override
-//		protected Boolean doInBackground(Boolean... params) {
-//
-//			try {
-//
-//	    		File xDir = null;
-//
-//		    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-//
-//			    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
-//
-//			    	File xDirRoot = Environment.getExternalStorageDirectory();
-//			    	xDir = new File(xDirRoot, Globals.EXTERNAL_DATA_FOLDER);
-//
-//		    	}
-//
-//		    	if (null != xDir) {
-//		    		String[] list = xDir.list();
-//		    		if (null != list) {
-//
-//		    			for (String item : list) {
-//		    				File file = new File(xDir, item);
-//		    				file.delete();
-//		    			}
-//
-//				    	//files.addAll(Arrays.asList(list));
-//		    		}
-//		    	}
-//
-//				File dir = getFilesDir();
-//
-//		    	if (null != dir) {
-//		    		String[] list = dir.list();
-//		    		if (null != list) {
-//
-//		    			for (String item : list) {
-//		    				File file = new File(dir, item);
-//		    				file.delete();
-//		    			}
-//
-//		    		}
-//		    	}
-//
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				Log.w("purging all files failed", e);
-//			}
-//
-//			return true;
-//		};
-//
-//		@Override
-//		protected void onPostExecute(Boolean files) {
-//
-//			Update();
-//		};
-//
-//		@Override
-//		protected void onProgressUpdate (Boolean... values) {
-//		};
-//
-//	};
+
+	private class PurgeFilesAsyncTask extends AsyncTask<Boolean, Boolean, Boolean> {
+
+		@Override
+		protected void onPreExecute() {
+
+        	Toast.makeText(getApplicationContext(), "Purging.", Toast.LENGTH_SHORT).show();
+		};
+
+		@Override
+		protected Boolean doInBackground(Boolean... params) {
+
+			try {
+
+	    		File xDir = null;
+
+		    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+
+			    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
+
+			    	File xDirRoot = Environment.getExternalStorageDirectory();
+			    	xDir = new File(xDirRoot, Globals.EXTERNAL_DATA_FOLDER);
+
+		    	}
+
+		    	if (null != xDir) {
+		    		String[] list = xDir.list();
+		    		if (null != list) {
+
+		    			for (String item : list) {
+		    				File file = new File(xDir, item);
+		    				file.delete();
+		    			}
+
+				    	//files.addAll(Arrays.asList(list));
+		    		}
+		    	}
+
+				File dir = getFilesDir();
+
+		    	if (null != dir) {
+		    		String[] list = dir.list();
+		    		if (null != list) {
+
+		    			for (String item : list) {
+		    				File file = new File(dir, item);
+		    				file.delete();
+		    			}
+
+		    		}
+		    	}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				Log.w("purging all files failed", e);
+			}
+
+			return true;
+		};
+
+		@Override
+		protected void onPostExecute(Boolean files) {
+
+			Update();
+		};
+
+		@Override
+		protected void onProgressUpdate (Boolean... values) {
+		};
+
+	};
 
 }
