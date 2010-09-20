@@ -87,47 +87,47 @@ public class ListFilesActivity extends ListActivity {
 
 		@Override
 		protected void onPreExecute () {
-
+			
 		}
-
+		
 		@Override
 		protected ArrayList<WebComicPage> doInBackground(Integer... params) {
 
 			//String[] files;
 			ArrayList<WebComicPage> pages = new ArrayList<WebComicPage>();
-
+			
 			try {
-
+				
 				File dir = getFilesDir();
 	    		File xDir = null;
-
+	    		
 		    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-
+		    		
 			    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
-
+		    		
 			    	File xDirRoot = Environment.getExternalStorageDirectory();
 			    	xDir = new File(xDirRoot, Globals.EXTERNAL_DATA_FOLDER);
-
+		    		
 		    	}
-
+		    	
 		    	if (null != xDir) {
 		    		String[] list = xDir.list();
 		    		if (null != list) {
-	
+		    			
 		    			for (String item : list) {
-		    				pages.add(new WebComicPage(WebComicInstance.getLot(), item));
+		    				pages.add(new WebComicPage(WebComicInstance.GetComic(), item));
 		    			}
-
+		    			
 				    	//files.addAll(Arrays.asList(list));
 		    		}
 		    	}
-
+		    	
 		    	if (null != dir) {
 		    		String[] list = dir.list();
 		    		if (null != list) {
 		    			
 		    			for (String item : list) {
-		    				pages.add(new WebComicPage(WebComicInstance.getLot(), item));
+		    				pages.add(new WebComicPage(WebComicInstance.GetComic(), item));
 		    			}
 		    			
 		    			//files.addAll(Arrays.asList(list));
