@@ -180,7 +180,7 @@ public class Utils {
 	}
 	
 	// From http://android-developers.blogspot.com/2010/07/multithreading-for-performance.html
-	static Bitmap downloadBitmap(String url) {
+	public static Bitmap downloadBitmap(String url) {
 		
 		//final AndroidHttpClient client = AndroidHttpClient("Android"); // Android API 8 only
 	    final DefaultHttpClient client = new DefaultHttpClient();
@@ -219,4 +219,5 @@ public class Utils {
 	    }
 	    return null;
 	}
+
 }
