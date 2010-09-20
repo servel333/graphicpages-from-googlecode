@@ -30,8 +30,7 @@
 
         </activity>
         
-        <activity android:name="ListFilesActivity">
-        </activity>
+        <activity android:name="ListFilesActivity" />
 
     </application>
 

@@ -30,6 +30,7 @@ public class GraphicPageViewerActivity extends Activity {
 	private UpdateTask _updateTask;
 
 	public static final String KEY_LAST_VIEWED_PAGE = "last_viewed_page";
+	static final int DIALOG_JUMP_TO_ID = 0;
 
 	private enum Action {
 		OLDEST, OLDER, UPDATE, NEWER, NEWEST
@@ -44,25 +45,25 @@ public class GraphicPageViewerActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_comic);
-        
+
      	((Button)findViewById(R.id.ui_newest_Button)).setOnClickListener(ui_newest_Button_Click);
     	((Button)findViewById(R.id.ui_oldest_Button)).setOnClickListener(ui_oldest_Button_Click);
     	((Button)findViewById(R.id.ui_newer_Button)).setOnClickListener(ui_newer_Button_Click);
     	((Button)findViewById(R.id.ui_older_Button)).setOnClickListener(ui_older_Button_Click);
-    	
+
     	_touchListener = new PageTouchListener();
     	((ImageView)findViewById(R.id.ui_image_ImageView)).setOnTouchListener(_touchListener);
-    	
+
     	//this.getIntent().getIntExtra(KEY_LAST_VIEWED, DEFAULT_LAST_VIEWED);
-    	
+
     	Intent intent = getIntent();
-    	
+
     	if (intent instanceof GoToPageIntent) {
     		setIntent(intent);
     		WebComicInstance.SetIndex(((GoToPageIntent)intent).GetIndex());
     		//Update(ACTION_UPDATE);
     	} else {
-    		
+
 	    	if (savedInstanceState != null) {
 	    		WebComicInstance.SetIndex(savedInstanceState.getInt(KEY_LAST_VIEWED_PAGE, -1));
 	    	}
@@ -168,15 +169,38 @@ public class GraphicPageViewerActivity extends Activity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
+
+    	Intent i;
+
         switch (item.getItemId()) {
-        case R.id.list_files:
-        	Intent i = new Intent(this, ListFilesActivity.class);
+        case R.id.list_files_menuitem:
+        	i = new Intent(this, ListFilesActivity.class);
             startActivity(i);
             return true;
+//        case R.id.jump_to_menuitem:
+//            showDialog(DIALOG_JUMP_TO_ID);
+//            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
     }
+
+//    protected Dialog onCreateDialog(int id) {
+//
+//        Dialog dialog;
+//
+//        switch(id) {
+//        case DIALOG_JUMP_TO_ID:
+//    		dialog = new Dialog(this);
+//    		dialog.setContentView(R.layout.go_to_page);
+//    		dialog.setTitle("Jump to...");
+//    		//Button ok = (Button)dialog.findViewById(R.id.ui_ok_Button);
+//    		break;
+//        default:
+//            dialog = null;
+//        }
+//        return dialog;
+//    }
 
     protected void Update(Action action) {
     	
