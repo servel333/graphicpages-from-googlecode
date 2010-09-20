@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    <string name="app_name">GraphicPages</string>
-<string name="app_full_name">org.nateperry.graphicpages</string><string name="newest">Newest</string><string name="newer">Newer</string>
-<string name="older">Older</string><string name="oldest">Oldest</string>
-<string name="date">Date</string>
-
-<string name="dynamic_bookmark">Dynamic Bookmark</string>
-<string name="dynamic_boookmark_description">A dynamic bookmark is a bookmark that is updated as you move forward or backward in the comic history.</string>
-<string name="number">Number</string>
-
-
-
-
-<string name="jump_to">Jump to page</string>
-<string name="list_files">List Files and Go-to</string>
-<string name="quit">Quit</string>
-<string name="purge">Purge files</string>
+    <string name="app_name">Questionable Content - GraphicPages Special Edition - Beta 1</string>
+    <string name="app_full_name">org.nateperry.graphicpages.single.questionablecontent</string>
+    <string name="date">Date</string>
+    <string name="delete">Delete</string>
+    <string name="jump_to">Jump to page</string>
+    <string name="list_files">List files</string>
+    <string name="newest">Newest</string>
+    <string name="newer">Newer</string>
+    <string name="number">Number</string>
+    <string name="older">Older</string>
+    <string name="oldest">Oldest</string>
+    <string name="purge">Purge all files</string>
+    <string name="quit">Quit</string>
+    <string name="view">View</string>
 </resources>

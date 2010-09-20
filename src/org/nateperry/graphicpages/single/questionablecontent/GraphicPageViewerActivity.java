@@ -1,11 +1,8 @@
-package org.nateperry.graphicpages;
+package org.nateperry.graphicpages.single.questionablecontent;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-
-import org.nateperry.library.NumericImageLot;
-import org.nateperry.library.NumericImageLotIndex;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,10 +28,9 @@ public class GraphicPageViewerActivity extends Activity {
 
 	private PageTouchListener _touchListener;
 	private UpdateTask _updateTask;
-	protected NumericImageLot _lot;
-	protected NumericImageLotIndex _index;
 
 	public static final String KEY_LAST_VIEWED_PAGE = "last_viewed_page";
+	static final int DIALOG_JUMP_TO_ID = 0;
 
 	private enum Action {
 		OLDEST, OLDER, UPDATE, NEWER, NEWEST
@@ -60,18 +56,18 @@ public class GraphicPageViewerActivity extends Activity {
 
     	//this.getIntent().getIntExtra(KEY_LAST_VIEWED, DEFAULT_LAST_VIEWED);
 
-//    	Intent intent = getIntent();
-//
-//    	if (intent instanceof GoToPageIntent) {
-//    		setIntent(intent);
-//    		WebComicInstance.SetIndex(((GoToPageIntent)intent).GetIndex());
-//    		//Update(ACTION_UPDATE);
-//    	} else {
-//
-//	    	if (savedInstanceState != null) {
-//	    		WebComicInstance.SetIndex(savedInstanceState.getInt(KEY_LAST_VIEWED_PAGE, -1));
-//	    	}
-//    	}
+    	Intent intent = getIntent();
+
+    	if (intent instanceof GoToPageIntent) {
+    		setIntent(intent);
+    		WebComicInstance.SetIndex(((GoToPageIntent)intent).GetIndex());
+    		//Update(ACTION_UPDATE);
+    	} else {
+
+	    	if (savedInstanceState != null) {
+	    		WebComicInstance.SetIndex(savedInstanceState.getInt(KEY_LAST_VIEWED_PAGE, -1));
+	    	}
+    	}
     };
 
     @Override
@@ -82,29 +78,22 @@ public class GraphicPageViewerActivity extends Activity {
     @Override
     public void onResume() {
     	super.onResume();
-
+    	
     	Intent intent = getIntent();
-
+    	
     	if (intent instanceof GoToPageIntent) {
     		setIntent(intent);
-
-    		GoToPageIntent g = (GoToPageIntent) intent;
-
-    		_lot = g.getLot();
-    		_index = g.getIndex();
-    	} else {
-    		_lot = org.nateperry.library.G.DEFAULT_LOT;
-    		_index = _lot.newIndex();
+    		WebComicInstance.SetIndex(((GoToPageIntent)intent).GetIndex());
     	}
-
+    	
     	Update(Action.UPDATE);
     };
 
     @Override
     public void onPause() {
-
+    	
     	if (_updateTask != null) _updateTask.cancel(false);
-
+    	
     	super.onPause();
     };
 
@@ -115,38 +104,30 @@ public class GraphicPageViewerActivity extends Activity {
 
     @Override
     public void onDestroy() {
-
-    	if (_updateTask != null) _updateTask.cancel(true);
-
     	super.onDestroy();
     }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
 
-//    	if (outState == null) {
-//    		outState = new Bundle();
-//    	}
-//
-//    	//outState.putString(KEY_LAST_VIEWED_COMIC, QC_NAME);
-//    	outState.putInt(KEY_LAST_VIEWED_PAGE, _index);
+    	if (outState == null) {
+    		outState = new Bundle();
+    	}
+
+    	//outState.putString(KEY_LAST_VIEWED_COMIC, QC_NAME);
+    	outState.putInt(KEY_LAST_VIEWED_PAGE, WebComicInstance.GetIndex());
     };
 
     @Override
     protected void onNewIntent(Intent intent) {
-
+    	
     	if (intent instanceof GoToPageIntent) {
     		setIntent(intent);
-
-    		GoToPageIntent g = (GoToPageIntent) intent;
-
-    		_lot = g.getLot();
-    		_index = g.getIndex();
-
+    		WebComicInstance.SetIndex(((GoToPageIntent)intent).GetIndex());
     		//Update(ACTION_UPDATE); // Happens in OnResume.
-		}
+    	}
+    	
     };
 
     private OnClickListener ui_newest_Button_Click = new OnClickListener()
@@ -187,18 +168,39 @@ public class GraphicPageViewerActivity extends Activity {
         return true;
     }
 
-
     public boolean onOptionsItemSelected(MenuItem item) {
+
+    	Intent i;
+
         switch (item.getItemId()) {
-        case R.id.list_files:
-        	Intent i = new Intent(this, ListFilesActivity.class);
+        case R.id.list_files_menuitem:
+        	i = new Intent(this, ListFilesActivity.class);
             startActivity(i);
             return true;
+//        case R.id.jump_to_menuitem:
+//            showDialog(DIALOG_JUMP_TO_ID);
+//            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
     }
 
+//    protected Dialog onCreateDialog(int id) {
+//
+//        Dialog dialog;
+//
+//        switch(id) {
+//        case DIALOG_JUMP_TO_ID:
+//    		dialog = new Dialog(this);
+//    		dialog.setContentView(R.layout.go_to_page);
+//    		dialog.setTitle("Jump to...");
+//    		//Button ok = (Button)dialog.findViewById(R.id.ui_ok_Button);
+//    		break;
+//        default:
+//            dialog = null;
+//        }
+//        return dialog;
+//    }
 
     protected void Update(Action action) {
     	
@@ -219,148 +221,130 @@ public class GraphicPageViewerActivity extends Activity {
 		protected Bitmap doInBackground(Action... params) {
 
 			try {
-				if (_lot == null) {
-
-					_lot = org.nateperry.library.G.DEFAULT_LOT;
-		    		_index = _lot.newIndex();
-
-				} else if (_index == null) {
-
-					_index = _lot.newIndex();
-
-				} else {
-
-					Action action = params[0];
-					switch (action) {
-						case OLDEST:
-							_index.setToOldest();
-							break;
-						case OLDER:
-							_index.change(-1);
-							break;
-						case NEWER:
-							_index.change(1);
-							break;
-						case NEWEST:
-							_index.setToNewest();
-							break;
-						default: // ACTION_UPDATE
-							break;
-					}
-				}
-
-				if (isCancelled()) { 
-					return null;
-				} else {
-					publishProgress(UpdateState.UPDATED);
+				Action action = params[0];
+				switch (action) {
+					case OLDEST:
+						WebComicInstance.SetOldestId();
+						break;
+					case OLDER:
+						WebComicInstance.SetOlderId();
+						break;
+					case NEWER:
+						WebComicInstance.SetNewerId();
+						break;
+					case NEWEST:
+						WebComicInstance.SetNewestId(true);
+						break;
+					default: // ACTION_UPDATE
+				    	if (WebComicInstance.GetIndex() == -1) {
+				    		WebComicInstance.SetNewestId();
+				    	}
+						break;
 				}
 				
-
-
-//    			// Check file on disk
-//
-//				Bitmap image = null;
-//
-//				File dir = getFilesDir();
-//	    		File file = new File(dir, _lot.getFileName(_index));
-//	    		File xDir = null;
-//	    		File xFile = null;
-//
-//		    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-//
-//			    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
-//
-//			    	File xRootDir = Environment.getExternalStorageDirectory();
-//			    	xDir = new File(xRootDir, Globals.EXTERNAL_DATA_FOLDER);
-//		    		xFile = new File(xDir, WebComicInstance.getLot().GetFileName(WebComicInstance.getIndex()));
-//
-//		    	}
-//
-//	    		if (file.exists()) {
-//
-//	    			FileInputStream in = openFileInput(WebComicInstance.getLot().GetFileName(WebComicInstance.getIndex()));
-//	    			image = BitmapFactory.decodeStream(in);
-//
-//	    			if (null == image) {
-//	    				file.delete();
-//	    			}
-//
-//	    		} else if (xFile != null && xFile.exists()) {
-//
-//	    			FileInputStream in = new FileInputStream(xFile.getAbsolutePath());
-//	    			image = BitmapFactory.decodeStream(in);
-//
-//	    			if (null == image) {
-//	    				xFile.delete();
-//	    			}
-//
-//	    		} 
-//
-//	    		if (null == image) {
-//
-//					if (!isCancelled()) { publishProgress(UpdateState.DOWNLOADING); }
-//
-//			    	String pageUrl = WebComicInstance.getLot().GetPageUrl(WebComicInstance.getIndex());
-//			    	image = Utils.downloadBitmap(pageUrl);
-//
-//			    	// Write the bitmap to a file.
-//			    	// Todo: buffer and write the file peace by peace instead of loading the whole thing into memory.
-//
-//			    	FileOutputStream out;
-//
-//			    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-//
-//		    			xDir.mkdirs();
-//		    			xFile.createNewFile();
-//
-//				    	out = new FileOutputStream(xFile);
-//
-//			    	} else {
-//
-//				    	out = openFileOutput(WebComicInstance.getLot().GetFileName(WebComicInstance.getIndex()), Context.MODE_PRIVATE);
-//
-//			    	}
-//
-//			    	image.compress(CompressFormat.PNG, 75, out);
-//			    	out.flush();
-//			    	out.close();
-//	    		}
-
+				if (!isCancelled()) { publishProgress(UpdateState.UPDATED); }
+    			
+    			// Check file on disk
+				
+				Bitmap image = null;
+				
+				File dir = getFilesDir();
+	    		File file = new File(dir, WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()));
+	    		File xDir = null;
+	    		File xFile = null;
+	    		
+		    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+		    		
+			    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
+		    		
+			    	File xRootDir = Environment.getExternalStorageDirectory();
+			    	xDir = new File(xRootDir, Globals.EXTERNAL_DATA_FOLDER);
+		    		xFile = new File(xDir, WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()));
+		    		
+		    	}
+		    	
+	    		if (file.exists()) {
+	    			
+	    			FileInputStream in = openFileInput(WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()));
+	    			image = BitmapFactory.decodeStream(in);
+	    			
+	    			if (null == image) {
+	    				file.delete();
+	    			}
+	    			
+	    		} else if (xFile != null && xFile.exists()) {
+	    			
+	    			FileInputStream in = new FileInputStream(xFile.getAbsolutePath());
+	    			image = BitmapFactory.decodeStream(in);
+	    			
+	    			if (null == image) {
+	    				xFile.delete();
+	    			}
+	    			
+	    		} 
+	    		
+	    		if (null == image) {
+	    			
+					if (!isCancelled()) { publishProgress(UpdateState.DOWNLOADING); }
+					
+			    	String pageUrl = WebComicInstance.GetComic().GetPageUrl(WebComicInstance.GetIndex());
+			    	image = Utils.downloadBitmap(pageUrl);
+	    			
+			    	// Write the bitmap to a file.
+			    	// Todo: buffer and write the file peace by peace instead of loading the whole thing into memory.
+			    	
+			    	FileOutputStream out;
+			    	
+			    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+			    		
+		    			xDir.mkdirs();
+		    			xFile.createNewFile();
+		    			
+				    	out = new FileOutputStream(xFile);
+				    	
+			    	} else {
+			    		
+				    	out = openFileOutput(WebComicInstance.GetComic().GetFileName(WebComicInstance.GetIndex()), Context.MODE_PRIVATE);
+				    	
+			    	}
+			    	
+			    	image.compress(CompressFormat.PNG, 75, out);
+			    	out.flush();
+			    	out.close();
+	    		}
+	    		
 		    	return image;
-
+		    	
 			} catch (Exception e) {
 				e.printStackTrace();
 				Log.w("downloading", e);
 			}
-
+			
 			return null;
 		}
-
+		
 		@Override
 		protected void onProgressUpdate (UpdateState... values) {
-
-			UpdateState status = values[0];
-
+			
 			if (values.length > 0) {
-				if (status == UpdateState.UPDATED) {
-
+				if (values[0] == UpdateState.UPDATED) {
+					
 			     	TextView text = (TextView)findViewById(R.id.ui_info_TextView);
-			     	text.setText(WebComicInstance.getLot().GetPageName(WebComicInstance.getIndex()));
-
-				} else if (status == UpdateState.DOWNLOADING) {
-
+			     	text.setText(WebComicInstance.GetComic().GetPageName(WebComicInstance.GetIndex()));
+					
+				} else if (values[0] == UpdateState.DOWNLOADING) {
+					
 					Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_SHORT).show();
-
+					
 				}
 			}
-
+			
 		}
-
+		
 		@Override
 		protected void onPostExecute(Bitmap result) {
-
 	     	if (result != null) {
-
+	     		
 	     		ImageView im = (ImageView)findViewById(R.id.ui_image_ImageView);
 	     		im.setImageBitmap(result);
 	     		

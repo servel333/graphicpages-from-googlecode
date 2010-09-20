@@ -13,14 +13,6 @@
         android:layout_centerHorizontal="true"
         />
 
-<!--
-    <View
-        android:id="@+id/ui_spacer1_View"
-        android:layout_height="2dip"
-        android:background="#FF909090"
-        android:layout_below="@+id/ui_info_TextView"
-        />
--->
     <ImageView
         android:id="@+id/ui_image_ImageView"
         android:layout_width="fill_parent"
