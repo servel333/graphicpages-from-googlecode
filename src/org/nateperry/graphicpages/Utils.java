@@ -18,7 +18,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 public class Utils {
-	
+
 	//public static InputStream wget(String imageUrl)
 	//{
 	//	InputStream stream = null;
@@ -158,12 +158,6 @@ public class Utils {
 		return "";
 	}
 
-	/**
-	 * Determines if the string is either Null or an empty string.
-	 * 
-	 * @param text  The string to evaluate.
-	 * @return  True if the string is Null or empty; otherwise False.
-	 */
 	public static boolean IsNullOrEmpty(String text) {
 		return (text == null) | (text == "");
 	}

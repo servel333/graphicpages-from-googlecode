@@ -3,80 +3,81 @@
     android:id="@+id/ui_all_RelativeLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:padding="0px"
     >
 
-    <TextView 
-        android:id="@+id/ui_info_TextView"
-        android:text="info" 
-        android:layout_width="wrap_content" 
+    <RelativeLayout
+        android:id="@+id/ui_navbox_RelativeLayout"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        />
+        android:padding="0px"
+        >
+    
+        <TextView 
+            android:id="@+id/ui_info_TextView"
+            android:text="info" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            />
+    
+        <RelativeLayout
+            android:id="@+id/ui_nav_RelativeLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ui_info_TextView"
+            android:padding="0px"
+            >
+            <Button
+                android:id="@+id/ui_oldest_Button"
+                android:text="@string/oldest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="2sp"
+                android:paddingBottom="2sp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="3dip"
+                />
+            <Button
+                android:id="@+id/ui_older_Button"
+                android:text="@string/older" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="2sp"
+                android:paddingBottom="2sp"
+                android:layout_toRightOf="@+id/ui_oldest_Button"
+                />
+            <Button
+                android:id="@+id/ui_newest_Button"
+                android:text="@string/newest" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="2sp"
+                android:paddingBottom="2sp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="3dip"
+                />
+            <Button
+                android:id="@+id/ui_newer_Button"
+                android:text="@string/newer" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="2sp"
+                android:paddingBottom="2sp"
+                android:layout_toLeftOf="@+id/ui_newest_Button"
+                />
+        </RelativeLayout>
+    
+    </RelativeLayout>
 
-<!--
-    <View
-        android:id="@+id/ui_spacer1_View"
-        android:layout_height="2dip"
-        android:background="#FF909090"
-        android:layout_below="@+id/ui_info_TextView"
-        />
--->
     <ImageView
         android:id="@+id/ui_image_ImageView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/ui_info_TextView"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/ui_navbox_RelativeLayout"
+        android:layout_gravity="center"
         android:scaleType="matrix"
         />
-
-    <RelativeLayout
-        android:id="@+id/ui_nav_RelativeLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        >
-
-        <Button
-            android:id="@+id/ui_oldest_Button"
-            android:text="@string/oldest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="2sp"
-            android:paddingBottom="2sp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginRight="3dip"
-            />
-        <Button
-            android:id="@+id/ui_older_Button"
-            android:text="@string/older" 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="2sp"
-            android:paddingBottom="2sp"
-            android:layout_toRightOf="@+id/ui_oldest_Button"
-            />
-        <Button
-            android:id="@+id/ui_newest_Button"
-            android:text="@string/newest" 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="2sp"
-            android:paddingBottom="2sp"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="3dip"
-            />
-        <Button
-            android:id="@+id/ui_newer_Button"
-            android:text="@string/newer" 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="2sp"
-            android:paddingBottom="2sp"
-            android:layout_toLeftOf="@+id/ui_newest_Button"
-            />
-    </RelativeLayout>
 
 </RelativeLayout>
         

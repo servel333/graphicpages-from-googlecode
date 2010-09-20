@@ -14,31 +14,30 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
+        public static final int jump_to=0x7f06000b;
         public static final int list_files=0x7f06000c;
-        public static final int purge=0x7f06000a;
-        public static final int ui_all_RelativeLayout=0x7f060002;
-        public static final int ui_exit_Item=0x7f06000b;
-        public static final int ui_files_ListView=0x7f060001;
-        public static final int ui_image_ImageView=0x7f060004;
+        public static final int quit=0x7f06000d;
+        public static final int ui_all_RelativeLayout=0x7f060001;
+        public static final int ui_exit_Item=0x7f06000a;
+        public static final int ui_files_ListView=0x7f060000;
+        public static final int ui_image_ImageView=0x7f060009;
         public static final int ui_info_TextView=0x7f060003;
-        public static final int ui_nav_RelativeLayout=0x7f060005;
-        public static final int ui_newer_Button=0x7f060009;
-        public static final int ui_newest_Button=0x7f060008;
-        public static final int ui_older_Button=0x7f060007;
-        public static final int ui_oldest_Button=0x7f060006;
-        public static final int ui_select_NumberPicker=0x7f060000;
+        public static final int ui_nav_RelativeLayout=0x7f060004;
+        public static final int ui_navbox_RelativeLayout=0x7f060002;
+        public static final int ui_newer_Button=0x7f060008;
+        public static final int ui_newest_Button=0x7f060007;
+        public static final int ui_older_Button=0x7f060006;
+        public static final int ui_oldest_Button=0x7f060005;
     }
     public static final class layout {
-        public static final int go_to_page=0x7f030000;
-        public static final int list_file=0x7f030001;
-        public static final int list_files=0x7f030002;
-        public static final int main=0x7f030003;
-        public static final int view_comic=0x7f030004;
+        public static final int list_file=0x7f030000;
+        public static final int list_files=0x7f030001;
+        public static final int main=0x7f030002;
+        public static final int view_comic=0x7f030003;
     }
     public static final class menu {
-        public static final int list_files_menu=0x7f050000;
-        public static final int main_menu=0x7f050001;
-        public static final int view_comic_menu=0x7f050002;
+        public static final int main_menu=0x7f050000;
+        public static final int view_comic_menu=0x7f050001;
     }
     public static final class string {
         public static final int app_full_name=0x7f040001;
@@ -53,7 +52,6 @@ public final class R {
         public static final int number=0x7f040009;
         public static final int older=0x7f040004;
         public static final int oldest=0x7f040005;
-        public static final int purge=0x7f04000d;
         public static final int quit=0x7f04000c;
     }
 }
