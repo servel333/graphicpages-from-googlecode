@@ -10,8 +10,10 @@
     <string name="newer">Newer</string>
     <string name="number">Number</string>
     <string name="older">Older</string>
-    <string name="oldest">Oldest</string>
+    <string name="oldest">Oldest</string><string name="package_data">org.nateperry.graphicpages</string><string name="package_name">org.nateperry.graphicpages</string>
     <string name="purge">Purge all files</string>
     <string name="quit">Quit</string>
     <string name="view">View</string>
+
+
 </resources>
