@@ -1,25 +1,25 @@
 package org.nateperry.graphicpages.library;
 
-import org.nateperry.graphicpages.library.ImageLot;
+import org.nateperry.graphicpages.library.ImageSet;
 
-public abstract class ImageLotIndex<IndexType> {
+public abstract class ImageSetIndex<IndexType> {
 
-	protected ImageLot<IndexType> _lot;
+	protected ImageSet<IndexType> _lot;
 	protected IndexType _index;
 
-	public ImageLotIndex(ImageLot<IndexType> lot) {
+	public ImageSetIndex(ImageSet<IndexType> lot) {
 
 		_lot = lot;
 		_index = _lot.getDefaultIndex();
 	}
 
-	public ImageLotIndex(ImageLot<IndexType> lot, IndexType index) {
+	public ImageSetIndex(ImageSet<IndexType> lot, IndexType index) {
 
 		_lot = lot;
 		_index = index;
 	}
 
-	public ImageLot<IndexType> getLot() {
+	public ImageSet<IndexType> getLot() {
 		return _lot;
 	}
 

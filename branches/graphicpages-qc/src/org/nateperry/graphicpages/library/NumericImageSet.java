@@ -1,22 +1,22 @@
 package org.nateperry.graphicpages.library;
 
-import org.nateperry.graphicpages.library.ImageLot;
-import org.nateperry.graphicpages.library.NumericImageLot;
-import org.nateperry.graphicpages.library.NumericImageLotIndex;
+import org.nateperry.graphicpages.library.ImageSet;
+import org.nateperry.graphicpages.library.NumericImageSet;
+import org.nateperry.graphicpages.library.NumericImageSetIndex;
 
-public abstract class NumericImageLot extends ImageLot<Integer> {
+public abstract class NumericImageSet extends ImageSet<Integer> {
 
-	public NumericImageLot() {
+	public NumericImageSet() {
 		super();
 	}
 
-	public NumericImageLot(NumericImageLot lot) {
+	public NumericImageSet(NumericImageSet lot) {
 		super(lot);
 	}
 
 	@Override
-	public NumericImageLotIndex newIndex() {
-		return new NumericImageLotIndex(this, getDefaultIndex());
+	public NumericImageSetIndex newIndex() {
+		return new NumericImageSetIndex(this, getDefaultIndex());
 	}
 
 	@Override

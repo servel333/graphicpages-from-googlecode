@@ -2,10 +2,9 @@ package org.nateperry.graphicpages.library;
 
 import org.nateperry.graphicpages.single.questionablecontent.R;
 import org.nateperry.graphicpages.util.CachedProperty;
-import org.nateperry.graphicpages.library.ImageLot;
-import org.nateperry.graphicpages.library.ImageLotIndex;
+import org.nateperry.graphicpages.library.ImageSetIndex;
 
-public abstract class ImageLot<IndexType> {
+public abstract class ImageSet<IndexType> {
 
 	// content://GraphicPage/<ComicName>/<Index>
 	public static final String URI_NAMESPACE = "GraphicPage";
@@ -13,11 +12,11 @@ public abstract class ImageLot<IndexType> {
 
 	protected CachedProperty<IndexType> _newestIndex;
 
-	public ImageLot() {
+	public ImageSet() {
 		_newestIndex = new CachedProperty<IndexType>(_indexUpdater);
 	}
 
-	public ImageLot(ImageLot<IndexType> lot) {
+	public ImageSet(ImageSet<IndexType> lot) {
 		_newestIndex = new CachedProperty<IndexType>(lot._newestIndex);
 	}
 
@@ -51,7 +50,7 @@ public abstract class ImageLot<IndexType> {
 		return onChangeIndex(index, amount);
 	}
 
-	public final IndexType changeIndex(ImageLotIndex<IndexType> index, IndexType amount) {
+	public final IndexType changeIndex(ImageSetIndex<IndexType> index, IndexType amount) {
 		return onChangeIndex(index.get(), amount);
 	}
 
@@ -67,7 +66,7 @@ public abstract class ImageLot<IndexType> {
 		return onGetPageName(index);
 	}
 
-	public final String getPageName(ImageLotIndex<IndexType> index) {
+	public final String getPageName(ImageSetIndex<IndexType> index) {
 		return onGetPageName(index.get());
 	}
 
@@ -75,7 +74,7 @@ public abstract class ImageLot<IndexType> {
 		return onGetPageDescription(index);
 	}
 
-	public final String getPageDescription(ImageLotIndex<IndexType> index) {
+	public final String getPageDescription(ImageSetIndex<IndexType> index) {
 		return onGetPageDescription(index.get());
 	}
 
@@ -87,7 +86,7 @@ public abstract class ImageLot<IndexType> {
 		return onGetPageUrl(index);
 	}
 
-	public final String getPageUrl(ImageLotIndex<IndexType> index) {
+	public final String getPageUrl(ImageSetIndex<IndexType> index) {
 		return onGetPageUrl(index.get());
 	}
 
@@ -95,7 +94,7 @@ public abstract class ImageLot<IndexType> {
 		return onGetFileName(index);
 	}
 
-	public final String getFileName(ImageLotIndex<IndexType> index) {
+	public final String getFileName(ImageSetIndex<IndexType> index) {
 		return onGetFileName(index.get());
 	}
 
@@ -140,7 +139,7 @@ public abstract class ImageLot<IndexType> {
 	 * 
 	 * @return  A new instance of ImageLotIndex.
 	 */
-	protected abstract ImageLotIndex<IndexType> newIndex();
+	protected abstract ImageSetIndex<IndexType> newIndex();
 
 	/**
 	 * Gets the default index for this this ImageLot implementation.  This

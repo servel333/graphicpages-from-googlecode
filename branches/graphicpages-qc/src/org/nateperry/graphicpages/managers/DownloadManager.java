@@ -1,23 +1,22 @@
-package org.nateperry.graphicpages.Managers;
+package org.nateperry.graphicpages.managers;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
-import org.nateperry.graphicpages.util.DownloadTask;
+import org.nateperry.graphicpages.util.DownloadAsyncTaskManager;
 import org.nateperry.graphicpages.util.DownloadItemInfo;
-import org.nateperry.graphicpages.util.DownloadTask.eStatus;
 
 public class DownloadManager {
 
 	public static final int MAX_DOWNLOADS = 2;
 
-	protected ArrayList<DownloadTask> _downloaders;
+	protected ArrayList<DownloadAsyncTaskManager> _downloaders;
 	protected Stack<DownloadItemInfo> _queue;
 	protected DownloadManagerChangedListener _listener;
 	protected DownloadTaskListener _taskListener;
 
 	public DownloadManager() {
-		_downloaders = new ArrayList<DownloadTask>();
+		_downloaders = new ArrayList<DownloadAsyncTaskManager>();
 		_queue = new Stack<DownloadItemInfo>();
 		_taskListener = new DownloadTaskListener();
 	}
@@ -29,22 +28,22 @@ public class DownloadManager {
 
 	protected void updateQueue() {
 
-		ArrayList<DownloadTask> completedTasks = new ArrayList<DownloadTask>();
+		ArrayList<DownloadAsyncTaskManager> completedTasks = new ArrayList<DownloadAsyncTaskManager>();
 
-		for (DownloadTask task : _downloaders) {
+		for (DownloadAsyncTaskManager task : _downloaders) {
 			if (task.isDownloadCompleted()) {
 				completedTasks.add(task);
 			}
 		}
 
-		for (DownloadTask task : completedTasks) {
+		for (DownloadAsyncTaskManager task : completedTasks) {
 
 			_downloaders.remove(task);
 			task.clearOnChangedListener();
 			if (task.wasError()) {
-				onItemErrored(task.getDownloadItem());
+				onItemErrored(task.getDownloadItemInfo());
 			} else {
-				onItemCompleted(task.getDownloadItem());
+				onItemCompleted(task.getDownloadItemInfo());
 			}
 		}
 
@@ -52,8 +51,8 @@ public class DownloadManager {
 				_queue.size() > 0) {
 
 			DownloadItemInfo item = _queue.pop();
-			DownloadTask task = new DownloadTask(item);
-			task.setOnChangedListener(_taskListener);
+			DownloadAsyncTaskManager task = new DownloadAsyncTaskManager(item);
+			task.setOnChangeListener(_taskListener);
 			task.startDownload();
 			_downloaders.add(task);
 
@@ -95,22 +94,26 @@ public class DownloadManager {
 		}
 	}
 
-	protected class DownloadTaskListener implements DownloadTask.OnChangeListener {
+	protected class DownloadTaskListener implements DownloadAsyncTaskManager.OnChangeListener {
 
-		public void onDownloadedChanged(DownloadTask task, int downloaded) {
-			onItemDownloadedChanged(task.getDownloadItem(), downloaded);
+		public void onDownloadedChanged(DownloadAsyncTaskManager task, int downloaded) {
+			onItemDownloadedChanged(task.getDownloadItemInfo(), downloaded);
 		}
 
-		public void onSizeChanged(DownloadTask task, int size) {
-			onItemSizeChanged(task.getDownloadItem(), size);
+		public void onSizeChanged(DownloadAsyncTaskManager task, int size) {
+			onItemSizeChanged(task.getDownloadItemInfo(), size);
 		}
 
-		public void onStatusChanged(DownloadTask task, eStatus status) {
+		public void onStatusChanged(
+				DownloadAsyncTaskManager task,
+				boolean isPaused, 
+				boolean isComplete, 
+				boolean isError) {
+
 			updateQueue();
 		}
 
 	}
-
 
 	public interface DownloadManagerChangedListener {
 		public void onItemCompleted(DownloadManager manager, DownloadItemInfo item);

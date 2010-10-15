@@ -1,43 +1,47 @@
 package org.nateperry.graphicpages.mvc.model;
 
-import org.nateperry.graphicpages.library.NumericImageLot;
+import org.nateperry.graphicpages.library.NumericImageSet;
+import org.nateperry.graphicpages.library.NumericImageSetIndex;
 
 import android.graphics.Bitmap;
 
+
+
 public class ShowImageModel {
 
-	protected NumericImageLot _lot;
+	protected NumericImageSet _set;
+	protected NumericImageSetIndex _index;
 
-	public ShowImageModel(NumericImageLot lot) {
-		_lot = lot;
+	public ShowImageModel(NumericImageSet lot) {
+		_set = lot;
 	}
 
 	public void changeToNewerIndex() {
-		_lot.();
+		_set;
 	}
 
 	public void changeToNewestIndex() {
-		_lot.();
+		_set.();
 	}
 
 	public void changeToOlderIndex () {
-		_lot.();
+		_set.();
 	}
 
 	public void changeToOldestIndex() {
-		_lot.();
+		_set.();
 	}
 
 	public String getImageTitle() {
-		return ;
+		return _set.getPageName(_index);
 	}
 
 	public Bitmap getImage() {
-		return ;
+		return null;
 	}
 
 	public boolean isImageAvailable() {
-		return ;
+		return true;
 	}
 
 }

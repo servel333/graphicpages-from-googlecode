@@ -1,13 +1,13 @@
-package org.nateperry.graphicpages.library.lot;
+package org.nateperry.graphicpages.library.sets;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.nateperry.graphicpages.library.NumericImageLot;
+import org.nateperry.graphicpages.library.NumericImageSet;
 
-public class MegaTokyoImageLot extends NumericImageLot {
+public class MegaTokyoSet extends NumericImageSet {
 
 	//http://megatokyo.com/strips/
 	//http://megatokyo.com/strips/1281.gif
@@ -15,17 +15,17 @@ public class MegaTokyoImageLot extends NumericImageLot {
 	protected static final Integer OLDEST_INDEX = 1;
 	protected static final Integer DEFAULT_INDEX = OLDEST_INDEX;
 
-	public MegaTokyoImageLot() {
+	public MegaTokyoSet() {
 		super();
 	}
 
-	public MegaTokyoImageLot(MegaTokyoImageLot lot) {
+	public MegaTokyoSet(MegaTokyoSet lot) {
 		super(lot);
 	}
 
 	@Override
 	public Object clone() {
-		return new MegaTokyoImageLot(this);
+		return new MegaTokyoSet(this);
 	}
 
 	@Override
