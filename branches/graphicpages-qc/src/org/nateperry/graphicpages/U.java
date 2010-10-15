@@ -1,4 +1,4 @@
-package org.nateperry.graphicpages.util;
+package org.nateperry.graphicpages;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,7 +14,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.nateperry.graphicpages.G;
 
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;

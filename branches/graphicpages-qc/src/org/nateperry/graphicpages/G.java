@@ -1,7 +1,7 @@
 package org.nateperry.graphicpages;
 
 /**
- * Application Globals
+ * Globals
  */
 public class G {
 
@@ -18,10 +18,10 @@ public class G {
 	public static final String EXTERNAL_DATA_FOLDER = 
 		"/Android/data/" + PACKAGE_NAME + "/files/";
 
-	public static final String SETTINGS_FILE = "GraphicPagesSettings";
-
-	public static final String LOT_SETTING_KEY = "lot";
-
-	public static final String ID_SETTING_KEY = "id";
+//	public static final String SETTINGS_FILE = "GraphicPagesSettings";
+//
+//	public static final String LOT_SETTING_KEY = "lot";
+//
+//	public static final String ID_SETTING_KEY = "id";
 
 }

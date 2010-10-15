@@ -5,7 +5,7 @@ import java.net.MalformedURLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.nateperry.graphicpages.util.U;
+import org.nateperry.graphicpages.U;
 import org.nateperry.graphicpages.library.NumericImageLot;
 
 public class QuestionableContent extends NumericImageLot {
