@@ -1,4 +1,4 @@
-package org.nateperry.graphicpages.library.lot;
+package org.nateperry.graphicpages.library.sets;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -6,9 +6,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.nateperry.graphicpages.U;
-import org.nateperry.graphicpages.library.NumericImageLot;
+import org.nateperry.graphicpages.library.NumericImageSet;
 
-public class QuestionableContent extends NumericImageLot {
+public class QuestionableContentSet extends NumericImageSet {
 
 	//public static final String QC_IMAGE_NAME = R.string.app_full_name + "/" + ID_NAME + "/%s";
 	//public static final String QC_IMAGE_DESCRIPTION = NAME + " comic number %s";
