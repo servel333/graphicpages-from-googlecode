@@ -15,7 +15,7 @@ public class ShowImageController {
 
 		_view = view;
 		_viewListener = new ViewListener();
-		_view.setOnChangeListener(_viewListener);
+		_view.setListener(_viewListener);
 		_model = model;
 
 	}
@@ -23,14 +23,14 @@ public class ShowImageController {
 	protected void updateView() {
 		if (_model.isImageAvailable()) {
 			_view.setImageTitle(_model.getImageTitle());
-			_view.setImage(_model.getImage());
+			_view.setImage(_model.getImage(_view));
 		} else {
 			// EMBEDDED string
 			_view.showToast("Downloading image");
 		}
 	}
 
-	public class ViewListener implements ShowImageView.OnChangeListener {
+	public class ViewListener implements ShowImageView.IListener {
 
 		public void onNewerClicked(ShowImageView view) {
 			_model.changeToNewerIndex();
