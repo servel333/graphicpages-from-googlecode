@@ -296,6 +296,14 @@ public class U {
 
 	}
 
+	public static File getInternalFile(ContextWrapper context, String file) {
+
+		File iDir = context.getFilesDir();
+		File iFile = new File(iDir, file);
+		return iFile;
+
+	}
+
 	public static boolean existsOnExternal(String file) {
 
 		File xDir = null;
@@ -312,6 +320,24 @@ public class U {
     	}
 
     	return xFile != null && xFile.exists();
+	}
+
+	public static File getExternalFile(String file) {
+
+		File xDir = null;
+		File xFile = null;
+
+    	if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+
+	    	//File myDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // Android API 8 only
+
+	    	File xRootDir = Environment.getExternalStorageDirectory();
+	    	xDir = new File(xRootDir, G.EXTERNAL_DATA_FOLDER);
+    		xFile = new File(xDir, file);
+
+    	}
+
+    	return xFile;
 	}
 
 	public static File getPreferredFileDirectory(ContextWrapper context) {
