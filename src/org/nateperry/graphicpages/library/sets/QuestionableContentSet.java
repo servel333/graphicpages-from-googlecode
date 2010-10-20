@@ -6,53 +6,35 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.nateperry.graphicpages.U;
-import org.nateperry.graphicpages.library.NumericImageSet;
+import org.nateperry.graphicpages.library.IImageSet;
 
-public class QuestionableContentSet extends NumericImageSet {
+public class QuestionableContentSet implements IImageSet {
 
-	//public static final String QC_IMAGE_NAME = R.string.app_full_name + "/" + ID_NAME + "/%s";
-	//public static final String QC_IMAGE_DESCRIPTION = NAME + " comic number %s";
 	protected static final String LATEST_REGEX = ".*http://www[.]questionablecontent[.]net/comics/([0-9]+)[.]png.*";
 	protected static final Integer OLDEST_INDEX = 1;
 	protected static final Integer DEFAULT_INDEX = OLDEST_INDEX;
 
-	public QuestionableContent() {
-		super();
+	public QuestionableContentSet() {
 	}
 
-	public QuestionableContent(QuestionableContent comic) {
-		super(comic);
-	}
-
-	@Override
-	public Object clone() {
-		return new QuestionableContent(this);
-	}
-
-	@Override
-	protected Integer onGetDefaultIndex() {
+	public Integer getDefaultIndex() {
 		return DEFAULT_INDEX;
 	}
 
-	@Override
-	protected String onGetFileName(Integer index) {
+	public String getFileName(Integer index) {
 		return getName() + "-" + index + ".png";
 	}
 
-	@Override
-	protected String onGetIndexName() {
+	public String getIndexName() {
 		return "QuestionableContent";
 	}
 
-	@Override
-	protected String onGetName() {
+	public String getName() {
 		return "Questionable Content";
 	}
 
-	@Override
-	protected Integer onGetNewestIndex() {
+	public Integer getNewestIndex(Integer latest) {
 
-		Integer latest = _newestIndex.getCachedProperty();
 		String line = null;
 
 		try {
@@ -83,33 +65,28 @@ public class QuestionableContentSet extends NumericImageSet {
 		return latest;
 	}
 
-	@Override
-	protected Integer onGetOldestIndex() {
+	public Integer getOldestIndex() {
 		return OLDEST_INDEX;
 	}
 
-	@Override
-	protected String onGetPageDescription(Integer index) {
+	public String getPageDescription(Integer index) {
 		return String.format("%s %s", getName(), index);
 	}
 
-	@Override
-	protected String onGetPageName(Integer index) {
+	public String getPageName(Integer index) {
 		return String.format("%s %s", getName(), index);
 	}
 
-	@Override
-	protected String onGetPageUrl(Integer index) {
+	public String getPageUrl(Integer index) {
+
 		return String.format("http://www.questionablecontent.net/comics/%s.png", index);
 	}
 
-	@Override
-	protected String onGetUrl() {
+	public String getUrl() {
 		return "http://www.questionablecontent.net";
 	}
 
-	@Override
-	protected Integer onParseFileName(String filename) {
+	public Integer parseFileName(String filename) {
 
 		int index = -1;
 		filename = filename.replaceAll("^" + getName() + "-", "");
@@ -123,25 +100,5 @@ public class QuestionableContentSet extends NumericImageSet {
 
 		return index;
 	}
-
-//	@Override
-//	protected Integer onGetNewerIndex(Integer index) {
-//
-//		if (getNewestIndex() > index) {
-//			id += 1;
-//		}
-//
-//		return index;
-//	}
-
-//	@Override
-//	protected Integer onGetOlderIndex(Integer index) {
-//
-//		if (getOldestIndex() < index) {
-//			id -= 1;
-//		}
-//
-//		return index;
-//	}
 
 }

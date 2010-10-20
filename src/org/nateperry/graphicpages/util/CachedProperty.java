@@ -7,19 +7,19 @@ public class CachedProperty<T> {
 	protected int _timeout;
 	protected T _cachedValue;
 	protected Calendar _lastUpdate;
-	protected Updater<T> _updater;
+	protected IUpdater<T> _updater;
 
 	public static final int DEFAULT_TIMEOUT = 30 * 60; // in seconds
 
 	public CachedProperty(
-			Updater<T> updater) { 
+			IUpdater<T> updater) { 
 
 		_timeout = DEFAULT_TIMEOUT;
 		_updater = updater;
 	}
 
 	public CachedProperty(
-			Updater<T> updater,
+			IUpdater<T> updater,
 			int timeout) {
 
 		_timeout = timeout;
@@ -27,7 +27,7 @@ public class CachedProperty<T> {
 	}
 
 	public CachedProperty(
-			Updater<T> updater,
+			IUpdater<T> updater,
 			int timeout,
 			T initialValue) {
 
@@ -85,13 +85,13 @@ public class CachedProperty<T> {
 		return _lastUpdate.after(timeout);
 	}
 
-	protected void updateCachedValue() {
+	public void updateCachedValue() {
 
 		_lastUpdate = Calendar.getInstance();
 		_cachedValue = _updater.updateProperty();
 	}
 
-	public interface Updater<T> {
+	public interface IUpdater<T> {
 
 		public abstract T updateProperty();
 
