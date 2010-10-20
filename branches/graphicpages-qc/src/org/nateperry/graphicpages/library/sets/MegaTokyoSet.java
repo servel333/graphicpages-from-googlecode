@@ -5,64 +5,50 @@ import java.net.MalformedURLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.nateperry.graphicpages.library.NumericImageSet;
+import org.nateperry.graphicpages.U;
+import org.nateperry.graphicpages.library.IImageSet;
 
-public class MegaTokyoSet extends NumericImageSet {
+public class MegaTokyoSet implements IImageSet {
 
 	//http://megatokyo.com/strips/
 	//http://megatokyo.com/strips/1281.gif
 	protected static final String LATEST_REGEX = "src=\"strips[/]([0-9]+).gif\"";
 	protected static final Integer OLDEST_INDEX = 1;
 	protected static final Integer DEFAULT_INDEX = OLDEST_INDEX;
-
+	
 	public MegaTokyoSet() {
 		super();
 	}
 
-	public MegaTokyoSet(MegaTokyoSet lot) {
-		super(lot);
-	}
-
-	@Override
-	public Object clone() {
-		return new MegaTokyoSet(this);
-	}
-
-	@Override
-	protected Integer onGetDefaultIndex() {
+	public Integer getDefaultIndex() {
 		return DEFAULT_INDEX;
 	}
 
-	@Override
-	protected String onGetFileName(Integer index) {
+	public String getFileName(Integer index) {
 		return getName() + "-" + index + ".gif";
 	}
 
-	@Override
-	protected String onGetIndexName() {
+	public String getIndexName() {
 		return "MegaTokyo";
 	}
 
-	@Override
-	protected String onGetName() {
+	public String getName() {
 		return "MegaTokyo";
 	}
 
-	@Override
-	protected Integer onGetNewestIndex() {
+	public Integer getNewestIndex(Integer newest) {
 
-		Integer latest = _newestIndex.getCachedProperty();
 		String line = null;
 
 		try {
-			line = Util.findOnPage(getUrl(), LATEST_REGEX);
+			line = U.findOnPage(getUrl(), LATEST_REGEX);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		if (!Util.isNullOrEmpty(line)) {
+		if (!U.isNullOrEmpty(line)) {
 
 			Matcher matcher = Pattern.compile(LATEST_REGEX).matcher(line);
 			String st_latest = null;
@@ -72,45 +58,38 @@ public class MegaTokyoSet extends NumericImageSet {
 			}
 
 			try {
-				latest = Integer.parseInt(st_latest);
+				newest = Integer.parseInt(st_latest);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			}
 
 		}
 
-		return latest;
+		return newest;
 	}
 
-	@Override
-	protected Integer onGetOldestIndex() {
+	public Integer getOldestIndex() {
 		return OLDEST_INDEX;
 	}
 
-	@Override
-	protected String onGetPageDescription(Integer index) {
+	public String getPageDescription(Integer index) {
 		return String.format("%s %s", getName(), index);
 	}
 
-	@Override
-	protected String onGetPageName(Integer index) {
+	public String getPageName(Integer index) {
 		return String.format("%s %s", getName(), index);
 	}
 
-	@Override
-	protected String onGetPageUrl(Integer index) {
+	public String getPageUrl(Integer index) {
 		return String.format("http://megatokyo.com/strips/%s.gif", index);
 	}
 
-	@Override
-	protected String onGetUrl() {
+	public String getUrl() {
 		return "http://megatokyo.com";
 	}
 
-	@Override
-	protected Integer onParseFileName(String filename) {
-
-		int index = -1;
+	public Integer parseFileName(String filename) {
+		Integer index = -1;
 		filename = filename.replaceAll("^" + getName() + "-", "");
 		filename = filename.replaceAll("[.][a-zA-Z]+$", "");
 

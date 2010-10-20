@@ -9,7 +9,7 @@ public class DownloadAsyncTaskManager implements IDownloadAsyncTaskManager {
 
 	protected final DownloadItemInfo _item;
 	protected volatile eDownloadStatus _status;
-	protected volatile OnChangeListener listener;
+	protected volatile IListener listener;
 	protected DownloadAsyncTask _downloader;
 
 	public DownloadAsyncTaskManager(DownloadItemInfo item) {
@@ -69,7 +69,7 @@ public class DownloadAsyncTaskManager implements IDownloadAsyncTaskManager {
     	return _item;
     }
 
-	public void setOnChangeListener(OnChangeListener l) {
+	public void setOnChangeListener(IListener l) {
 		listener = l;
 	}
 
@@ -98,7 +98,7 @@ public class DownloadAsyncTaskManager implements IDownloadAsyncTaskManager {
 		}		
 	}
 
-	public interface OnChangeListener {
+	public interface IListener {
 
 		public void onStatusChanged(
 				DownloadAsyncTaskManager task, 

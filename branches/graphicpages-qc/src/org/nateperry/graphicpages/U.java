@@ -342,6 +342,48 @@ public class U {
 		return dir;
 	}
 
+	/**
+	 * Evaluates value and determines if it is a valid index.
+	 * 
+	 * @param value  The value to evaluate.
+	 * @param oldest  The oldest index in the set.
+	 * @param newest  The newest index in the set.
+	 * @return  A value indicating if value is valid.
+	 */
+	public static boolean isValidIndex(
+			Integer value, 
+			Integer oldest, 
+			Integer newest) {
+
+		return (oldest <= value && value <= newest);
+	}
+
+	/**
+	 * If value is a valid index, value is returned.  If value is not a valid
+	 * index, the closest valid index to value is returned.
+	 * 
+	 * The definition of 'closest' depends on IndexType and the implemented
+	 * ImageLot.
+	 * 
+	 * @param value  The value to evaluate.
+	 * @param oldest  The oldest index in the set.
+	 * @param newest  The newest index in the set.
+	 * @return  value, or the closest valid value to value.
+	 */
+	public static Integer getValidIndex(
+			Integer value, 
+			Integer oldest, 
+			Integer newest) {
+
+		if (oldest > value) {
+			value = oldest;
+		} else if (value > newest) {
+			value = newest;
+		}
+
+		return value;
+	}
+
 //	public static InputStream wget(String imageUrl)
 //	{
 //		InputStream stream = null;

@@ -8,15 +8,15 @@ public class QuestionableContentWebComic extends WebComic {
 	//public static final String QC_IMAGE_NAME = R.string.app_full_name + "/" + ID_NAME + "/%s";
 	//public static final String QC_IMAGE_DESCRIPTION = NAME + " comic number %s";
 	public static final String LATEST_REGEX = ".*http://www[.]questionablecontent[.]net/comics/([0-9]+)[.]png.*";
-	
+
 	public QuestionableContentWebComic() {
 		super();
 	}
-	
+
 	public QuestionableContentWebComic(QuestionableContentWebComic comic) {
 		super(comic);
 	}
-	
+
 	@Override
 	public String OnGetIdName() {
 		return "QuestionableContent";
@@ -26,7 +26,7 @@ public class QuestionableContentWebComic extends WebComic {
 	public String OnGetName() {
 		return "Questionable Content";
 	}
-	
+
 	@Override
 	public String OnGetPageUrl(int id) {
 		return String.format("http://www.questionablecontent.net/comics/%s.png", id);
@@ -43,35 +43,35 @@ public class QuestionableContentWebComic extends WebComic {
 		if (GetNewestId() > id) {
 			id += 1;
 		}
-		
+
 		return id;
 	}
 
 	@Override
 	public int OnGetNewestId() {
-		
+
 		int latest = GetOldestId();
 		String line = Utils.FindOnPage_Safe(GetUrl(), LATEST_REGEX);
-		
+
 		if (!Utils.IsNullOrEmpty(line)) {
-			
+
 			Matcher matcher = Pattern.compile(LATEST_REGEX).matcher(line);
 			String st_latest = null;
 			if (matcher.lookingAt())
 			{
 				st_latest = matcher.group(1);
 			}
-			
+
 			Utils.TryParse(st_latest, latest);
-			
+
 			try {
 				latest = Integer.parseInt(st_latest);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			}
-			
+
 		}
-		
+
 		return latest;
 	}
 

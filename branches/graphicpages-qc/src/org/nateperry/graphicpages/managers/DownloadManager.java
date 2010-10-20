@@ -12,7 +12,7 @@ public class DownloadManager {
 
 	protected ArrayList<DownloadAsyncTaskManager> _downloaders;
 	protected Stack<DownloadItemInfo> _queue;
-	protected DownloadManagerChangedListener _listener;
+	protected DownloadManager.IListener _listener;
 	protected DownloadTaskListener _taskListener;
 
 	public DownloadManager() {
@@ -61,7 +61,7 @@ public class DownloadManager {
 	}
 
 	public void setDownloadManagerChangedListener(
-			DownloadManagerChangedListener l) {
+			IListener l) {
 
 		_listener = l;
 	}
@@ -94,7 +94,7 @@ public class DownloadManager {
 		}
 	}
 
-	protected class DownloadTaskListener implements DownloadAsyncTaskManager.OnChangeListener {
+	protected class DownloadTaskListener implements DownloadAsyncTaskManager.IListener {
 
 		public void onDownloadedChanged(DownloadAsyncTaskManager task, int downloaded) {
 			onItemDownloadedChanged(task.getDownloadItemInfo(), downloaded);
@@ -115,7 +115,7 @@ public class DownloadManager {
 
 	}
 
-	public interface DownloadManagerChangedListener {
+	public interface IListener {
 		public void onItemCompleted(DownloadManager manager, DownloadItemInfo item);
 		public void onItemErrored(DownloadManager manager, DownloadItemInfo item);
 		public void onItemSizeChanged(DownloadManager manager, DownloadItemInfo task, int downloaded);
