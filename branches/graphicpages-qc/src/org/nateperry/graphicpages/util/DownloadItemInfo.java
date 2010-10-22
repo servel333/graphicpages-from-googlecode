@@ -1,7 +1,10 @@
 package org.nateperry.graphicpages.util;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
+
+import org.nateperry.graphicpages.library.IImageSet;
 
 public class DownloadItemInfo {
 
@@ -17,6 +20,18 @@ public class DownloadItemInfo {
 
     	_url = url;
     	_file = file;
+		_size = -1;
+		_downloaded = 0;
+
+    }
+
+    public DownloadItemInfo(
+    		IImageSet set,
+    		Integer index) 
+    		throws MalformedURLException {
+
+    	_url = new URL(set.getPageUrl(index));
+    	_file = new File(set.getFileName(index));
 		_size = -1;
 		_downloaded = 0;
 

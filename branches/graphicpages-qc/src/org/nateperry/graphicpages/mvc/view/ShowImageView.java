@@ -1,10 +1,6 @@
 package org.nateperry.graphicpages.mvc.view;
 
-import java.io.File;
-import java.io.FileInputStream;
-
 import org.nateperry.graphicpages.I;
-import org.nateperry.graphicpages.U;
 import org.nateperry.graphicpages.intents.JumpToIndexIntent;
 import org.nateperry.graphicpages.listeners.ShowImageTouchListener;
 import org.nateperry.graphicpages.mvc.controller.ShowImageController;
@@ -14,9 +10,8 @@ import org.nateperry.graphicpages.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.InputFilter.LengthFilter;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,7 +25,8 @@ import android.widget.Toast;
 public class ShowImageView extends Activity {
 
 	protected IListener _listener;
-	private ShowImageTouchListener _touchListener;
+	protected ShowImageTouchListener _touchListener;
+	protected Toast _toast;
 
 	public ShowImageView() {
 	}
@@ -68,7 +64,14 @@ public class ShowImageView extends Activity {
 	}
 
 	public void showToast(String text) {
-		Toast.makeText(this, text, Toast.LENGTH_SHORT);
+
+		if (null != _toast) {
+			//_toast.cancel();
+		}
+
+		_toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+		_toast.show();
+
 	}
 
     public void setListener(IListener l) {
@@ -184,7 +187,7 @@ public class ShowImageView extends Activity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
 
-    	Intent i;
+//    	Intent i;
 
         switch (item.getItemId()) {
         case R.id.list_files_menuitem:

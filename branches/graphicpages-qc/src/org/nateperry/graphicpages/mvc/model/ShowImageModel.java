@@ -18,13 +18,13 @@ public class ShowImageModel {
 
 	protected IImageSet _set;
 	protected final CachedProperty<Integer> _newest;
-	protected Integer _index;
+	protected int _index;
 
 	public ShowImageModel(IImageSet set) {
 		_set = set;
 		_index = _set.getDefaultIndex();
 		_newest = new CachedProperty<Integer>(new CPUpdater());
-		_newest.setCachedProperty(_set.getDefaultIndex());
+		_newest.setCachedProperty(_set.getDefaultIndex(), false);
 	}
 
 	public void changeToNewerIndex() {
@@ -51,6 +51,14 @@ public class ShowImageModel {
 
 	public String getImageTitle() {
 		return _set.getPageName(_index);
+	}
+
+	public IImageSet getImageSet() {
+		return _set;
+	}
+
+	public int getIndex() {
+		return _index;
 	}
 
 	public Bitmap getImage(Activity view) {
@@ -98,8 +106,19 @@ public class ShowImageModel {
 		return null;
 	}
 
-	public boolean isImageAvailable() {
-		return true;
+	public boolean isImageAvailable(Activity view) {
+
+		File file = null;
+		File iFile = U.getInternalFile(view, _set.getFileName(_index));
+		File xFile = U.getExternalFile(_set.getFileName(_index));
+
+		if (null != iFile && iFile.exists()) {
+			file = iFile;
+		} else if (null != xFile && xFile.exists()) {
+			file = xFile;
+		}
+
+		return null != file;
 	}
 
 	protected class CPUpdater implements CachedProperty.IUpdater<Integer> {

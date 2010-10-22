@@ -4,10 +4,10 @@ import java.util.Calendar;
 
 public class CachedProperty<T> {
 
-	protected int _timeout;
 	protected T _cachedValue;
 	protected Calendar _lastUpdate;
-	protected IUpdater<T> _updater;
+	protected int _timeout;
+	protected final IUpdater<T> _updater;
 
 	public static final int DEFAULT_TIMEOUT = 30 * 60; // in seconds
 
@@ -16,6 +16,8 @@ public class CachedProperty<T> {
 
 		_timeout = DEFAULT_TIMEOUT;
 		_updater = updater;
+		_lastUpdate = null;
+
 	}
 
 	public CachedProperty(
@@ -24,6 +26,8 @@ public class CachedProperty<T> {
 
 		_timeout = timeout;
 		_updater = updater;
+		_lastUpdate = null;
+
 	}
 
 	public CachedProperty(
@@ -47,7 +51,8 @@ public class CachedProperty<T> {
 	}
 
 	public T getProperty() {
-		if (_lastUpdate == null || isExpired()) {
+
+		if (null == _lastUpdate || isExpired()) {
 			updateCachedValue();
 		}
 
@@ -64,8 +69,14 @@ public class CachedProperty<T> {
 	}
 
 	public void setCachedProperty(T value) {
+		setCachedProperty(value, true);
+	}
 
-		_lastUpdate = Calendar.getInstance();
+	public void setCachedProperty(T value, boolean restartTimeout) {
+
+		if (restartTimeout) {
+			_lastUpdate = Calendar.getInstance();
+		}
 		_cachedValue = value;
 	}
 
@@ -79,10 +90,21 @@ public class CachedProperty<T> {
 
 	public boolean isExpired() {
 
-		Calendar timeout = Calendar.getInstance();
-		timeout.add(Calendar.SECOND, _timeout);
+		boolean expired;
 
-		return _lastUpdate.after(timeout);
+		if (null == _lastUpdate) {
+
+			expired = true;
+
+		} else {
+
+			Calendar timeout = Calendar.getInstance();
+			timeout.add(Calendar.SECOND, _timeout);
+			expired = _lastUpdate.after(timeout);
+
+		}
+
+		return expired;
 	}
 
 	public void updateCachedValue() {
