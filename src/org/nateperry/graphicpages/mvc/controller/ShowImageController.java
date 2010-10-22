@@ -1,7 +1,9 @@
 package org.nateperry.graphicpages.mvc.controller;
 
+import org.nateperry.graphicpages.I;
 import org.nateperry.graphicpages.mvc.model.ShowImageModel;
 import org.nateperry.graphicpages.mvc.view.ShowImageView;
+import org.nateperry.graphicpages.util.DownloadItemInfo;
 
 public class ShowImageController {
 
@@ -21,12 +23,18 @@ public class ShowImageController {
 	}
 
 	protected void updateView() {
-		if (_model.isImageAvailable()) {
+		if (_model.isImageAvailable(_view)) {
 			_view.setImageTitle(_model.getImageTitle());
 			_view.setImage(_model.getImage(_view));
 		} else {
-			// EMBEDDED string
-			_view.showToast("Downloading image");
+			try {
+				DownloadItemInfo info = new DownloadItemInfo(_model.getImageSet(), _model.getIndex());
+				I.downloadManager.AddToQueue(info);
+				_view.setImageTitle(_model.getImageTitle());
+				_view.showToast("Downloading " + _model.getIndex() + "."); // EMBEDDED string
+			} catch (Exception e) {
+				_view.showToast("Download " + _model.getIndex() + " failed."); // EMBEDDED string
+			}
 		}
 	}
 
