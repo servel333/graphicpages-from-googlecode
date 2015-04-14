@@ -1,0 +1,25 @@
+## View subscriptions ##
+  * A subscription could be a web comic, RSS feed, Atom feed or other feed
+  * A subscription contains pages
+  * A 'page' is a single image in the comic/feed (or perhaps a set of images for complex comics)
+
+## Automatically download new pages to the local disk ##
+  * As new pages become available in the subscription, the application should automatically download them (depending on settings) and store them locally
+  * Downloaded pages should be available to the other image viewers on the application (added to the media ContentProvider)
+
+## Get next/last page when browsing pages ##
+  * When viewing comics, asynchronically download the next comic in the sequence, then the previous one
+
+## Save lists of viewed comics ##
+  * Store the 'read' or 'viewed' state of pages
+  * Optionally discard viewed comics (when space is needed only?)
+
+## Bookmarks ##
+  * automatically save the last page viewed in a sequence
+  * Browsing from in the middle of a sequence
+
+## Jump to page ##
+  * Jump to page by date or number
+
+## Starred pages ##
+  * Starred pages are not automatically deleted
